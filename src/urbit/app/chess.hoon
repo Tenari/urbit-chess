@@ -2,7 +2,7 @@
 ::
 ::  import libraries and expose namespace
 /-  *historic
-/+  *chess, dbug, default-agent, pals
+/+  *chess, dbug, default-agent, hark=hark-store, pals
 ::
 ::  define state structures
 |%
@@ -38,6 +38,7 @@
 |_  =bowl:gall
 +*  this     .
     default  ~(. (default-agent this %|) bowl)
+    help     ~(. +> bowl)
 ++  on-init
   ^-  (quip card _this)
   :_  this
@@ -362,7 +363,7 @@
             :~  [%give %poke-ack `~[leaf+err]]
             ==
           =/  move-result
-            (try-move u.game-state move.action)
+            (try-move:help u.game-state move.action)
           ::  check the move is legal
           ?~  new.move-result
             :_  this
@@ -434,6 +435,18 @@
       :-  :~  :*  %give  %fact  ~[/challenges]
                   %chess-update  !>([%challenge src.bowl challenge])
               ==
+              :*  =/  title=(list content:hark)
+                    ~[[%ship src.bowl] [%text ' has sent a challenge']]
+                  =/  content=(list content:hark)
+                    ~[[%text event.challenge]]
+                  =/  =bin:hark
+                    [/challenges [%chess /]]
+                  =/  hark-action=action:hark
+                    [%add-note bin title content now.bowl ~ ~]
+                  =/  =cage
+                    [%hark-action !>(hark-action)]
+                  [%pass /hark-store %agent [our.bowl %hark-store] %poke cage]
+              ==
           ==
       %=  this
         challenges-received
@@ -442,7 +455,17 @@
     ::
     ::  handle declined challenges
     %chess-decline-challenge
-      :-  ~
+      :-  :~  :*  =/  title=(list content:hark)
+                    ~[[%ship src.bowl] [%text ' declined your challenge']]
+                  =/  =bin:hark
+                    [/challenges [%chess /]]
+                  =/  hark-action=action:hark
+                    [%add-note bin title ~ now.bowl ~ ~]
+                  =/  =cage
+                    [%hark-action !>(hark-action)]
+                  [%pass /hark-store %agent [our.bowl %hark-store] %poke cage]
+              ==
+          ==
       %=  this
         challenges-sent  (~(del by challenges-sent) src.bowl)
       ==
@@ -675,6 +698,17 @@
                 :*  %give  %fact  ~[/active-games]
                     %chess-game  !>(new-game)
                 ==
+                ::  send notification
+                :*  =/  title=(list content:hark)
+                      ~[[%ship src.bowl] [%text ' accepts your challenge']]
+                    =/  =bin:hark
+                      [/challenges [%chess /]]
+                    =/  hark-action=action:hark
+                      [%add-note bin title ~ now.bowl ~ /(scot %da u.game-id)]
+                    =/  =cage
+                      [%hark-action !>(hark-action)]
+                    [%pass /hark-store %agent [our.bowl %hark-store] %poke cage]
+                ==
             ==
         %=  this
           challenges-sent  (~(del by challenges-sent) src.bowl)
@@ -708,6 +742,17 @@
               ::  send the new game as an update to the other player's agent
               :*  %give  %fact  ~[/active-games]
                   %chess-game  !>(new-game)
+              ==
+              ::  send notification
+              :*  =/  title=(list content:hark)
+                    ~[[%ship src.bowl] [%text ' accepts your challenge']]
+                  =/  =bin:hark
+                    [/challenges [%chess /]]
+                  =/  hark-action=action:hark
+                    [%add-note bin title ~ now.bowl ~ /(scot %da u.game-id)]
+                  =/  =cage
+                    [%hark-action !>(hark-action)]
+                  [%pass /hark-store %agent [our.bowl %hark-store] %poke cage]
               ==
           ==
       %=  this
@@ -792,6 +837,7 @@
           ?~  p.sign
             [~ this]
           %-  (slog u.p.sign)
+          ::  XX: frontend popup for nack
           :-  ~
           %=  this
             challenges-sent  (~(del by challenges-sent) src.bowl)
@@ -820,6 +866,17 @@
               :-  :~  :*  %give  %fact  ~[/game/(scot %da u.game-id)/updates]
                           %chess-update  !>([%draw-offer u.game-id])
                       ==
+                      ::  notify hark-store
+                      :*  =/  title=(list content:hark)
+                            ~[[%ship src.bowl] [%text ' offers a draw']]
+                          =/  =bin:hark
+                            [/updates [%chess /(scot %p src.bowl)/(scot %da u.game-id)]]
+                          =/  hark-action=action:hark
+                            [%add-note bin title ~ now.bowl ~ /(scot %da u.game-id)]
+                          =/  =cage
+                            [%hark-action !>(hark-action)]
+                          [%pass /hark-store %agent [our.bowl %hark-store] %poke cage]
+                      ==
                   ==
               %=  this
                 games  (~(put by games) u.game-id u.game-state(got-draw-offer &))
@@ -838,6 +895,17 @@
                                         ==
                           ~
                       ==
+                      ::  notify hark-store
+                      :*  =/  title=(list content:hark)
+                            ~[[%ship src.bowl] [%text ' accepts your draw offer']]
+                          =/  =bin:hark
+                            [/updates [%chess /(scot %p src.bowl)/(scot %da u.game-id)]]
+                          =/  hark-action=action:hark
+                            [%add-note bin title ~ now.bowl ~ /(scot %da u.game-id)]
+                          =/  =cage
+                            [%hark-action !>(hark-action)]
+                          [%pass /hark-store %agent [our.bowl %hark-store] %poke cage]
+                      ==
                   ==
               =/  updated-game  game.u.game-state
               =.  result.updated-game  `%'½–½'
@@ -848,6 +916,17 @@
             %chess-draw-decline
               :-  :~  :*  %give  %fact  ~[/game/(scot %da u.game-id)/updates]
                           %chess-update  !>([%draw-declined u.game-id])
+                      ==
+                      ::  notify hark-store
+                      :*  =/  title=(list content:hark)
+                            ~[[%ship src.bowl] [%text ' declines your draw offer']]
+                          =/  =bin:hark
+                            [/updates [%chess /(scot %p src.bowl)/(scot %da u.game-id)]]
+                          =/  hark-action=action:hark
+                            [%add-note bin title ~ now.bowl ~ /(scot %da u.game-id)]
+                          =/  =cage
+                            [%hark-action !>(hark-action)]
+                          [%pass /hark-store %agent [our.bowl %hark-store] %poke cage]
                       ==
                   ==
               %=  this
@@ -861,22 +940,24 @@
                 [~ this]  :: nice try, cheater
               =/  move  !<(chess-move q.cage.sign)
               =/  move-result
-                (try-move u.game-state move)
+                (try-move:help u.game-state move)
               ::  illegal move
               ?~  new.move-result
                 [cards.move-result this]  ::  nice try, cheater
               =,  u.new.move-result
+              ::
+              ::  XX: shouldn't notify if %chess is open
+              ::  XX: check if opponent has resigned
               :-  cards.move-result
               ?.  ?=(~ result.game)
-              ::  archive games with results
+                ::  archive games with results
                 %=  this
                   games    (~(del by games) u.game-id)
                   archive  (~(put by archive) u.game-id game)
                 ==
               ::  add new games to our list
               %=  this
-                games  %+  ~(put by games)  u.game-id
-                       u.new.move-result
+                games  (~(put by games) u.game-id u.new.move-result)
               ==
             %chess-game-result
               =/  result  !<(chess-game-result q.cage.sign)
@@ -938,9 +1019,9 @@
 ++  on-arvo   on-arvo:default
 ++  on-fail   on-fail:default
 --
-|%
 ::
 ::  helper core for moves
+|_  =bowl:gall
 ::  test if a given move is legal
 ++  try-move
   |=  [game-state=active-game-state move=chess-move]
@@ -953,85 +1034,116 @@
     [~ ~]
   =/  updated-game  `chess-game`game.game-state
   =.  moves.updated-game  (snoc moves.updated-game move)
-  =/  new-fen-repetition  (increment-repetition fen-repetition.game-state u.new-position)
+  =/  fen  (position-to-fen u.new-position)
+  =/  new-fen-repetition  (increment-repetition fen-repetition.game-state fen)
   =/  in-checkmate  ~(in-checkmate with-position u.new-position)
   =/  in-stalemate  ?:  in-checkmate
                       |
                     ~(in-stalemate with-position u.new-position)
+  =/  ship-to-move
+      ?-  player-to-move.position
+        %white  white.game
+        %black  black.game
+      ==
+  ?>  ?=([%ship @p] ship-to-move)
   =/  special-draw-available
     ?|  (check-threefold new-fen-repetition u.new-position)
         (check-50-move-rule u.new-position)
     ==
   =/  special-draw-claim  &(special-draw-available auto-claim-special-draws.game-state)
-  =/  position-update-card
-    :*  %give
-        %fact
-        ~[/game/(scot %da game-id.game.game-state)/updates]
-        %chess-update
-        !>([%position game-id.game.game-state (position-to-fen u.new-position) special-draw-available])
-    ==
-  ::  check if game ends by checkmate, stalemate, or special draw
-  ?:  ?|  in-checkmate
-          in-stalemate
-          special-draw-claim
+  =/  base-cards
+    =/  position-update-card
+      :*  %give
+          %fact
+          ~[/game/(scot %da game-id.game)/updates]
+          %chess-update
+          !>([%position game-id.game fen special-draw-available])
       ==
-      ::  update result with score
-      =.  result.updated-game
-        ?:  in-stalemate  `%'½–½'
-        ?:  special-draw-claim  `%'½–½'
-        ?:  in-checkmate
-          ?-  player-to-move.u.new-position
-            %white  `%'0-1'
-            %black  `%'1-0'
-          ==
-        !!
-      ::  give a card of the game result to opponent ship
-      :-  `[updated-game u.new-position new-fen-repetition special-draw-available |4.game-state]
-      ?.  special-draw-claim
-        :~  position-update-card
-            :*  %give  %fact  ~[/game/(scot %da game-id.game.game-state)/updates]
-                %chess-update
-                !>([%result game-id.game.game-state (need result.updated-game)])
-            ==
-            ::  kick subscriber from game
-            :*  %give  %kick  :~  /game/(scot %da game-id.game.game-state)/updates
-                                  /game/(scot %da game-id.game.game-state)/moves
-                              ==
-                ~
-            ==
+    ?:  =(+.ship-to-move our.bowl)
+      [position-update-card ~]
+    =/  place
+      ?:  |(in-checkmate in-stalemate)
+        [/result ~]
+      [/updates /(scot %p src.bowl)]  ::  XX: no access to game id
+    =/  notification
+      ?:  in-checkmate
+        [[%ship src.bowl] [%text ' wins. Checkmate!'] ~]~
+      ?:  in-stalemate
+        [[%ship src.bowl] [%text ' forced a stalemate'] ~]~
+      :-  [[%ship src.bowl] [%text ' moved'] ~]
+      [[%text (~(algebraicize with-position position) move)] ~]
+    :~  position-update-card
+        :*  =/  =bin:hark
+              [-.place [%chess +.place]]
+            =/  hark-action=action:hark
+              [%add-note bin -.notification +.notification now.bowl ~ ~]
+            =/  =cage
+              [%hark-action !>(hark-action)]
+            [%pass /hark-store %agent [our.bowl %hark-store] %poke cage]
         ==
-      ::  if we're auto-claiming a special draw, send opponent our move with the result
+    ==
+  =/  result-cards
+    ::  check if game ends by checkmate, stalemate, or special draw
+    ?.  ?|  in-checkmate
+            in-stalemate
+            special-draw-claim
+        ==
+      base-cards
+    ::  update result with score
+    =.  result.updated-game
+      ?:  in-stalemate  `%'½–½'
+      ?:  special-draw-claim  `%'½–½'
+      ?:  in-checkmate
+        ?-  player-to-move.u.new-position
+          %white  `%'0-1'
+          %black  `%'1-0'
+        ==
+      !!
+    ?.  special-draw-claim
+      :: weld base cards here
       :~  position-update-card
-          :*  %give  %fact  ~[/game/(scot %da game-id.game.game-state)/moves]
-              %chess-game-result
-              !>([game-id.game.game-state (need result.updated-game) `move])
-          ==
           :*  %give  %fact  ~[/game/(scot %da game-id.game.game-state)/updates]
               %chess-update
               !>([%result game-id.game.game-state (need result.updated-game)])
           ==
+          ::  kick subscriber from game
           :*  %give  %kick  :~  /game/(scot %da game-id.game.game-state)/updates
                                 /game/(scot %da game-id.game.game-state)/moves
                             ==
               ~
           ==
       ==
-  :-  `[updated-game u.new-position new-fen-repetition special-draw-available |4.game-state]
-  :~  position-update-card
-  ==
+    ::  if we're auto-claiming a special draw, send opponent our move with the result
+    :~  position-update-card
+        :: weld base cards here
+        :*  %give  %fact  ~[/game/(scot %da game-id.game.game-state)/moves]
+            %chess-game-result
+            !>([game-id.game.game-state (need result.updated-game) `move])
+        ==
+        :*  %give  %fact  ~[/game/(scot %da game-id.game.game-state)/updates]
+            %chess-update
+            !>([%result game-id.game.game-state (need result.updated-game)])
+        ==
+        :*  %give  %kick  :~  /game/(scot %da game-id.game.game-state)/updates
+                              /game/(scot %da game-id.game.game-state)/moves
+                          ==
+            ~
+        ==
+    ==
+  [`[updated-game u.new-position] result-cards]
 ++  increment-repetition
-  |=  [fen-repetition=(map @t @ud) position=chess-position]
+  |=  [rep=(map @t @ud) pos=chess-position]
   ^-  (map @t @ud)
-  =/  fen  ~(simplified position-to-fen position)
-  =*  count  (~(get by fen-repetition) fen)
+  =/  fen  ~(simplified position-to-fen pos)
+  =*  count  (~(get by rep) fen)
   ?~  count
-    (~(put by fen-repetition) fen 1)
-  (~(put by fen-repetition) fen +((need count)))
+    (~(put by rep) fen 1)
+  (~(put by rep) fen +((need count)))
 ++  check-threefold
-  |=  [fen-repetition=(map @t @ud) position=chess-position]
+  |=  [rep=(map @t @ud) pos=chess-position]
   ^-  ?
-  =/  fen  ~(simplified position-to-fen position)
-  =*  count  (~(get by fen-repetition) fen)
+  =/  fen  ~(simplified position-to-fen pos)
+  =*  count  (~(get by rep) fen)
   ?~  count
     |
   (gth (need count) 2)

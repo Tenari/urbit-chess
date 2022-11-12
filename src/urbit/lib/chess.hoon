@@ -764,6 +764,8 @@
     ==
   ::
   ::  produce the result of a move in chess notation as a @t
+  ::
+  ::  XX: safe & unsafe version? unsafe version faster but allows illegal moves
   ++  algebraicize
     |=  move=chess-move
     ^-  @t
