@@ -58,11 +58,6 @@ export function Chessboard () {
       ? Side.White
       : Side.Black
     : getCgColor(chess.turn()) as Side
-  const boardTitle = (displayGame !== null)
-    ? (orientation === Side.White)
-      ? `${CHESS.pieceWhiteKnight} ${displayGame.info.white} vs. ${CHESS.pieceBlackKnight} ${displayGame.info.black}`
-      : `${CHESS.pieceBlackKnight} ${displayGame.info.black} vs. ${CHESS.pieceWhiteKnight} ${displayGame.info.white}`
-    : `~${window.ship}'s practice board`
 
   //
   // React hook helper functions
@@ -375,11 +370,6 @@ export function Chessboard () {
 
   return (
     <div className='game-container'>
-      <div className='title-container'>
-        <p className='title-text' style={{ fontSize: URBIT_CHESS.lengthToFontSize.get(boardTitle.length) }}>
-          {`${boardTitle}`}
-        </p>
-      </div>
       <div className={`board-container ${boardTheme} ${pieceTheme}`}>
         <div ref={boardRef} className='chessboard cg-wrap' />
         { (promotionMove !== null) ? renderPromotionInterface() : <div/> }
