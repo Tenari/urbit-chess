@@ -71,6 +71,8 @@ export type GameID = string
 
 export type FENPosition = string
 
+export type SAN = string
+
 export type GameInfo = {
   gameID: GameID,
   event: string,
@@ -78,7 +80,8 @@ export type GameInfo = {
   round: string,
   white: Ship,
   black: Ship,
-  result: Result
+  result: Result,
+  moves: Array<SAN>
 }
 
 export type ActiveGameInfo = {
