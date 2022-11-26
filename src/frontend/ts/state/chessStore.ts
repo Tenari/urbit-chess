@@ -1,20 +1,28 @@
 import create from 'zustand'
 import Urbit from '@urbit/http-api'
 import { CHESS } from '../constants/chess'
-import { Update, Ship, GameID, GameInfo, ActiveGameInfo, Challenge, ChessUpdate, ChallengeUpdate, ChallengeSentUpdate, ChallengeReceivedUpdate, PositionUpdate, ResultUpdate, DrawOfferUpdate, DrawDeclinedUpdate, SpecialDrawPreferenceUpdate } from '../types/urbitChess'
+import { Update, Ship, GameID, SAN, GameInfo, ActiveGameInfo, Challenge, ChessUpdate, ChallengeUpdate, ChallengeSentUpdate, ChallengeReceivedUpdate, PositionUpdate, ResultUpdate, DrawOfferUpdate, DrawDeclinedUpdate, SpecialDrawPreferenceUpdate } from '../types/urbitChess'
 import { findFriends } from '../helpers/urbitChess'
 import ChessState from './chessState'
 
 const useChessStore = create<ChessState>((set, get) => ({
   urbit: null,
   displayGame: null,
+  displayMoves: [''],
   practiceBoard: '',
   activeGames: new Map(),
   incomingChallenges: new Map(),
   outgoingChallenges: new Map(),
   friends: [],
   setUrbit: (urbit: Urbit) => set({ urbit }),
-  setDisplayGame: (displayGame: ActiveGameInfo | null) => set({ displayGame }),
+  setDisplayGame: (displayGame: ActiveGameInfo | null) => {
+    set({ displayGame })
+    // XX: "GameInfo or ActiveGameInfo?" conditional logic
+    //
+    //     might be necessary depending on how we implement
+    //     the "view completed games" feature
+    set(state => ({ displayMoves: displayGame.info.moves }))
+  },
   setPracticeBoard: (practiceBoard: String | null) => set({ practiceBoard }),
   setFriends: async (friends: Array<Ship>) => set({ friends }),
   receiveChallengeUpdate: (data: ChallengeUpdate) => {
