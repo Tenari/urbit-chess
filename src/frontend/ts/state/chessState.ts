@@ -12,6 +12,7 @@ interface ChessState {
   friends: Array<Ship>
   setUrbit: (urbit: Urbit) => void
   setDisplayGame: (displayGame: ActiveGameInfo | null) => void
+  setDisplayMoves: (displayMoves: Array<SAN> | null) => void
   setPracticeBoard: (practiceBoard: String | null) => void
   setFriends: (friends: Array<Ship>) => void
   receiveChallengeUpdate: (data: ChallengeUpdate) => void

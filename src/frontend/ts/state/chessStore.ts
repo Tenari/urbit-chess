@@ -21,8 +21,10 @@ const useChessStore = create<ChessState>((set, get) => ({
     //
     //     might be necessary depending on how we implement
     //     the "view completed games" feature
-    set(state => ({ displayMoves: displayGame.info.moves }))
+    get().setDisplayMoves(displayGame.info.moves)
   },
+  setDisplayMoves: (displayMoves: Array<SAN> | null) =>
+    set(state => ({ displayMoves })),
   setPracticeBoard: (practiceBoard: String | null) => set({ practiceBoard }),
   setFriends: async (friends: Array<Ship>) => set({ friends }),
   receiveChallengeUpdate: (data: ChallengeUpdate) => {
@@ -91,8 +93,8 @@ const useChessStore = create<ChessState>((set, get) => ({
         const positionData = data as PositionUpdate
         const gameID = positionData.gameID
         const specialDrawAvailable = positionData.specialDrawAvailable
-
         const currentGame = get().activeGames.get(gameID)
+
         const updatedGame: ActiveGameInfo = {
           position: positionData.position,
           gotDrawOffer: currentGame.gotDrawOffer,
@@ -108,6 +110,7 @@ const useChessStore = create<ChessState>((set, get) => ({
         console.log('RECEIVED POSITION UPDATE')
         break
       }
+
       case Update.Result: {
         const resultData = data as ResultUpdate
         const gameID = resultData.gameID
@@ -125,6 +128,7 @@ const useChessStore = create<ChessState>((set, get) => ({
         console.log('RECEIVED RESULT UPDATE')
         break
       }
+
       case Update.DrawOffer: {
         const offerData = data as DrawOfferUpdate
         const gameID = offerData.gameID
@@ -145,6 +149,7 @@ const useChessStore = create<ChessState>((set, get) => ({
         console.log('RECEIVED DRAW OFFER UPDATE')
         break
       }
+
       case Update.DrawDeclined: {
         const declineData = data as DrawDeclinedUpdate
         const gameID = declineData.gameID
