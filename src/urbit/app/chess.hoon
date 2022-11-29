@@ -657,7 +657,14 @@
         ==
       =/  fen  (position-to-fen u.new-position)
       :-  :~  :*  %give  %fact  ~[/game/(scot %da game-id.action)/updates]
+<<<<<<< HEAD
                   %chess-update  !>([%position game-id.action fen (check-50-move-rule u.new-position)])
+=======
+                  ::  XX: could replace ++rear of algebraicizing
+                  ::      whole move list with arm algebraicizing
+                  ::      just the one move
+                  %chess-update  !>([%position game-id.action fen (rear (algebraicize game.action))])
+>>>>>>> 51c98e2 (Add SAN to %position update)
               ==
           ==
       %=  this
@@ -854,7 +861,7 @@
       =/  fen  (position-to-fen position.game-state)
       =/  cards  ^-  (list card)
         :~  :*  %give  %fact  ~[/game/(scot %da u.game-id)/updates]
-                %chess-update  !>([%position u.game-id fen special-draw-available.game-state])
+                %chess-update  !>([%position u.game-id fen special-draw-available.game-state (rear (algebraicize game.game-state))])
             ==
         ==
       =?  cards  got-draw-offer.game-state
@@ -1166,7 +1173,7 @@
         %fact
         ~[/game/(scot %da game-id.game.game-state)/updates]
         %chess-update
-        !>([%position game-id.game.game-state (position-to-fen u.new-position) special-draw-available])
+        !>([%position game-id.game.game-state (position-to-fen u.new-position) special-draw-available (rear (algebraicize updated-game))])
     ==
   ::  check if game ends by checkmate, stalemate, or special draw
   ?:  ?|  in-checkmate

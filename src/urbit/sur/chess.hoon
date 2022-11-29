@@ -253,7 +253,7 @@
       [%challenge-received who=ship challenge=chess-challenge]
       [%challenge-resolved who=ship]
       [%challenge-replied who=ship]
-      [%position game-id=@dau position=@t special-draw-available=?]
+      [%position game-id=@dau position=@t special-draw-available=? san=@t]
       [%draw-offer game-id=@dau]
       [%draw-declined game-id=@dau]
       [%undo-declined game-id=@dau]
