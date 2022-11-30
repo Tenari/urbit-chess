@@ -657,14 +657,10 @@
         ==
       =/  fen  (position-to-fen u.new-position)
       :-  :~  :*  %give  %fact  ~[/game/(scot %da game-id.action)/updates]
-<<<<<<< HEAD
-                  %chess-update  !>([%position game-id.action fen (check-50-move-rule u.new-position)])
-=======
                   ::  XX: could replace ++rear of algebraicizing
                   ::      whole move list with arm algebraicizing
                   ::      just the one move
-                  %chess-update  !>([%position game-id.action fen (rear (algebraicize game.action))])
->>>>>>> 51c98e2 (Add SAN to %position update)
+                  %chess-update  !>([%position game-id.action fen (check-50-move-rule u.new-position) (rear (algebraicize game.action))])
               ==
           ==
       %=  this
@@ -861,7 +857,8 @@
       =/  fen  (position-to-fen position.game-state)
       =/  cards  ^-  (list card)
         :~  :*  %give  %fact  ~[/game/(scot %da u.game-id)/updates]
-                %chess-update  !>([%position u.game-id fen special-draw-available.game-state (rear (algebraicize game.game-state))])
+                ::  XX: seems to be error here on some new moves
+                %chess-update  !>([%position u.game-id fen special-draw-available.game-state ?~(moves.game.game-state '' (rear (algebraicize game.game-state)))])
             ==
         ==
       =?  cards  got-draw-offer.game-state
