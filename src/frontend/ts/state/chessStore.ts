@@ -8,7 +8,7 @@ import ChessState from './chessState'
 const useChessStore = create<ChessState>((set, get) => ({
   urbit: null,
   displayGame: null,
-  displayMoves: [''],
+  displayMoves: [],
   practiceBoard: '',
   activeGames: new Map(),
   incomingChallenges: new Map(),
@@ -23,7 +23,7 @@ const useChessStore = create<ChessState>((set, get) => ({
     //     the "view completed games" feature
     get().setDisplayMoves(displayGame.info.moves)
   },
-  setDisplayMoves: (displayMoves: Array<SAN> | null) =>
+  setDisplayMoves: (displayMoves: Array<SAN>) =>
     set(state => ({ displayMoves })),
   setPracticeBoard: (practiceBoard: String | null) => set({ practiceBoard }),
   setFriends: async (friends: Array<Ship>) => set({ friends }),
@@ -94,8 +94,7 @@ const useChessStore = create<ChessState>((set, get) => ({
         const gameID = positionData.gameID
         const specialDrawAvailable = positionData.specialDrawAvailable
         const currentGame = get().activeGames.get(gameID)
-        currentGame.info.moves.push(positionData.moves)
-        
+        currentGame.info.moves.push(positionData.move)
         const updatedGame: ActiveGameInfo = {
           position: positionData.position,
           gotDrawOffer: currentGame.gotDrawOffer,
@@ -108,7 +107,7 @@ const useChessStore = create<ChessState>((set, get) => ({
         set(state => ({ activeGames: state.activeGames.set(gameID, updatedGame) }))
         updateDisplayGame(updatedGame)
 
-        console.log('RECEIVED POSITION UPDATE')
+        console.log('RECEIVED POSITION UPDATE' + ' ' + updatedGame.info.moves)
         break
       }
 

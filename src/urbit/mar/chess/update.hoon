@@ -47,7 +47,7 @@
             ['gameID' [%s (scot %da game-id.upd)]]
             ['position' [%s position.upd]]
             ['specialDrawAvailable' [%b special-draw-available.upd]]
-            ['san' [%s san.upd]]
+            ['move' [%s san.upd]]
         ==
       %result
         %-  pairs:enjs

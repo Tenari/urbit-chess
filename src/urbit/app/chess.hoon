@@ -1039,6 +1039,8 @@
                   archive  (~(put by archive) u.game-id game)
                 ==
               ::  add new games to our list
+              ::  XX: could this be where position update
+              ::      isn't getting move data?
               %=  this
                 games  %+  ~(put by games)  u.game-id
                        u.new.move-result

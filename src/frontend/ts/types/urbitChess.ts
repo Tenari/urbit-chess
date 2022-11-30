@@ -141,7 +141,7 @@ export interface PositionUpdate extends ChessUpdate {
   gameID: GameID
   position: FENPosition
   specialDrawAvailable: boolean
-  moves: SAN | null
+  move: SAN | null
 }
 
 export interface ResultUpdate extends ChessUpdate {
