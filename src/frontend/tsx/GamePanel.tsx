@@ -54,9 +54,7 @@ export function GamePanel () {
             if (displayMoves.indexOf(ply) % 2 !== 0) {
               return (
               <li>
-                {
-                  ply + (displayMoves.indexOf(ply) + 1 > displayMoves.length ? '' : ' ' + displayMoves.at(displayMoves.indexOf(ply) + 1))
-                }
+                {ply} {(displayMoves.indexOf(ply) + 1 > displayMoves.length ? '' : displayMoves.at(displayMoves.indexOf(ply) + 1))}
               </li>
             )
             }
