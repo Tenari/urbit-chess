@@ -838,7 +838,7 @@
         games  (~(put by games) u.game-id [new-game *chess-position *(map @t @ud) | & | | | | |])
       ==
     ::
-    ::  XX: document this
+    ::  subscribe to updates on active games
     [%game @ta %updates ~]
       =/  game-id  `(unit @dau)`(slaw %da i.t.path)
       ?~  game-id
@@ -857,7 +857,7 @@
       =/  fen  (position-to-fen position.game-state)
       =/  cards  ^-  (list card)
         :~  :*  %give  %fact  ~[/game/(scot %da u.game-id)/updates]
-                %chess-update  !>([%position u.game-id fen special-draw-available.game-state ?~(moves.game.game-state '' (rear (algebraicize game.game-state)))])
+                %chess-update  !>([%position u.game-id fen special-draw-available.game-state ''])
             ==
         ==
       =?  cards  got-draw-offer.game-state
