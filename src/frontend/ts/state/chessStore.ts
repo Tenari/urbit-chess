@@ -94,7 +94,9 @@ const useChessStore = create<ChessState>((set, get) => ({
         const gameID = positionData.gameID
         const specialDrawAvailable = positionData.specialDrawAvailable
         const currentGame = get().activeGames.get(gameID)
-        currentGame.info.moves.push(positionData.move)
+        if (positionData.move !== '') {
+          currentGame.info.moves.push(positionData.move)
+        }
         const updatedGame: ActiveGameInfo = {
           position: positionData.position,
           gotDrawOffer: currentGame.gotDrawOffer,
