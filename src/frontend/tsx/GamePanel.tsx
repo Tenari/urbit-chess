@@ -47,7 +47,7 @@ export function GamePanel () {
         <div id="opp-player" className={'player row' + (hasGame ? '' : ' hidden')}>
           <p>{opponent}</p>
         </div>
-        <div className="moves col">
+        <div className={'moves col' + (hasGame ? '' : ' hidden')}>
         <ol>
         {
           Array.from(displayMoves).map((ply, thisIndex, thisArray) => {
