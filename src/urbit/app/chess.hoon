@@ -857,7 +857,7 @@
       =/  fen  (position-to-fen position.game-state)
       =/  cards  ^-  (list card)
         :~  :*  %give  %fact  ~[/game/(scot %da u.game-id)/updates]
-                %chess-update  !>([%position u.game-id fen special-draw-available.game-state ''])
+                %chess-update  !>([%position u.game-id fen special-draw-available.game-state ~])
             ==
         ==
       =?  cards  got-draw-offer.game-state
