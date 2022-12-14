@@ -375,11 +375,6 @@ export function Chessboard () {
 
   return (
     <div className='game-container'>
-      <div className='title-container'>
-        <p className='title-text' style={{ fontSize: URBIT_CHESS.lengthToFontSize.get(boardTitle.length) }}>
-          {`${boardTitle}`}
-        </p>
-      </div>
       <div className={`board-container ${boardTheme} ${pieceTheme}`}>
         <div ref={boardRef} className='chessboard cg-wrap' />
         { (promotionMove !== null) ? renderPromotionInterface() : <div/> }
