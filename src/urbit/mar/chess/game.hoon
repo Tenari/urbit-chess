@@ -1,3 +1,4 @@
+/-  *chess
 /+  chess
 =,  format
 |_  game=chess-game:chess
@@ -20,8 +21,12 @@
         :-  'moves'
         :-  %a
         %+  turn
-          (algebraicize:chess game)
-        |=(san=@t :-(%s san))
+          moves.game
+        |=  move=[move=chess-move fen=chess-fen san=chess-san]
+        %-  pairs:enjs
+        :~  ['san' [%s san.move]]
+            ['fen' [%s fen.move]]
+        ==
     ==
   --
 ++  grad  %noun

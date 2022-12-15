@@ -27,6 +27,7 @@ const useChessStore = create<ChessState>((set, get) => ({
         console.log('setDisplayGame.info.moves: ' + displayGame.info.moves)
         console.log('setDisplayGame move: ' + move)
         console.log('setDisplayGame san: ' + move.san)
+        console.log('setDisplayGame fen: ' + move.fen)
         get().displayMoves.push(move.san)
       }
     } else {
