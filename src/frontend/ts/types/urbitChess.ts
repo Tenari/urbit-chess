@@ -81,7 +81,7 @@ export type GameInfo = {
   white: Ship,
   black: Ship,
   result: Result,
-  moves: Array<SAN>
+  moves: Array<[SAN, FENPosition]>
 }
 
 export type ActiveGameInfo = {

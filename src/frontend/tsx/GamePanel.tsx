@@ -27,17 +27,6 @@ export function GamePanel () {
     await pokeAction(urbit, claimSpecialDraw(gameID))
   }
 
-  // from stackoverflow, only slightly modified to satisfy
-  // type checker
-  function sliceIntoChunks(arr: Array<SAN>, chunkSize: number) {
-    const res = [];
-    for (let i = 0; i < arr.length; i += chunkSize) {
-        const chunk = arr.slice(i, i + chunkSize);
-        res.push(chunk);
-    }
-    return res;
-}
-
   return (
     <div className='game-panel-container col'>
       <div className="game-panel col">

@@ -1,7 +1,7 @@
 import create from 'zustand'
 import Urbit from '@urbit/http-api'
 import { CHESS } from '../constants/chess'
-import { Update, Ship, GameID, SAN, GameInfo, ActiveGameInfo, Challenge, ChessUpdate, ChallengeUpdate, ChallengeSentUpdate, ChallengeReceivedUpdate, PositionUpdate, ResultUpdate, DrawOfferUpdate, DrawDeclinedUpdate, SpecialDrawPreferenceUpdate } from '../types/urbitChess'
+import { Update, Ship, GameID, SAN, FENPosition, GameInfo, ActiveGameInfo, Challenge, ChessUpdate, ChallengeUpdate, ChallengeSentUpdate, ChallengeReceivedUpdate, PositionUpdate, ResultUpdate, DrawOfferUpdate, DrawDeclinedUpdate, SpecialDrawPreferenceUpdate } from '../types/urbitChess'
 import { findFriends } from '../helpers/urbitChess'
 import ChessState from './chessState'
 
@@ -22,13 +22,11 @@ const useChessStore = create<ChessState>((set, get) => ({
       //
       //     might be necessary depending on how we implement
       //     the "view completed games" feature
-      get().setDisplayMoves(displayGame.info.moves)
+      get().setDisplayMoves([])
+      for (let move of displayGame.info.moves) {
+        get().displayMoves.push(move as unknown as string)
+      }
     } else {
-      // XX: get moves list working for practice games
-      //
-      //     will require work in Chessboard.tsx, perhaps
-      //     work on the backend e.g. a new poke to just
-      //     get the PositionUpdate through /updates wire
       set({ displayGame })
       get().setDisplayMoves([])
     }
@@ -105,7 +103,7 @@ const useChessStore = create<ChessState>((set, get) => ({
         const specialDrawAvailable = positionData.specialDrawAvailable
         const currentGame = get().activeGames.get(gameID)
         if (positionData.move !== '') {
-          currentGame.info.moves.push(positionData.move)
+          currentGame.info.moves.push([positionData.move, positionData.position])
         }
         const updatedGame: ActiveGameInfo = {
           position: positionData.position,
