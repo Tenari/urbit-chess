@@ -24,7 +24,10 @@ const useChessStore = create<ChessState>((set, get) => ({
       //     the "view completed games" feature
       get().setDisplayMoves([])
       for (let move of displayGame.info.moves) {
-        get().displayMoves.push(move as unknown as string)
+        console.log('setDisplayGame.info.moves: ' + displayGame.info.moves)
+        console.log('setDisplayGame move: ' + move)
+        console.log('setDisplayGame san: ' + move.san)
+        get().displayMoves.push(move.san)
       }
     } else {
       set({ displayGame })
@@ -102,8 +105,10 @@ const useChessStore = create<ChessState>((set, get) => ({
         const gameID = positionData.gameID
         const specialDrawAvailable = positionData.specialDrawAvailable
         const currentGame = get().activeGames.get(gameID)
-        if (positionData.move !== '') {
-          currentGame.info.moves.push([positionData.move, positionData.position])
+        if (positionData.move.san !== '') {
+          console.log('receiveUpdate san: ' + positionData.move.san)
+          console.log('receiveUpdate fen: ' + positionData.move.fen)
+          currentGame.info.moves.push(positionData.move)
         }
         const updatedGame: ActiveGameInfo = {
           position: positionData.position,

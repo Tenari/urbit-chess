@@ -69,9 +69,14 @@ export type Ship = string
 
 export type GameID = string
 
+export type SAN = string
+
 export type FENPosition = string
 
-export type SAN = string
+export type Move = {
+  san: SAN
+  fen: FENPosition
+}
 
 export type GameInfo = {
   gameID: GameID,
@@ -81,7 +86,7 @@ export type GameInfo = {
   white: Ship,
   black: Ship,
   result: Result,
-  moves: Array<[SAN, FENPosition]>
+  moves: Array<Move>
 }
 
 export type ActiveGameInfo = {
@@ -136,7 +141,7 @@ export interface PositionUpdate extends ChessUpdate {
   gameID: GameID
   position: FENPosition
   specialDrawAvailable: boolean
-  move: SAN | null
+  move: Move | null
 }
 
 export interface ResultUpdate extends ChessUpdate {
