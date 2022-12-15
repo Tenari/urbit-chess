@@ -517,8 +517,8 @@
                                        (snip moves.game)
                                      (snip (snip moves.game))
             position.u.game-state  ?:  =(+.ship-to-move our.bowl)
-                                     (fen-to-position (tail (rear (snip moves.game))))
-                                   (fen-to-position (tail (rear (snip (snip moves.game)))))
+                                     (fen-to-position (head (tail (rear (snip moves.game)))))
+                                   (fen-to-position (head (tail (rear (snip (snip moves.game))))))
             got-undo-request.u.game-state  |
           ==
           %=  this
@@ -1127,8 +1127,8 @@
                                            (snip (snip moves.game))
                                          (snip moves.game)
                 position.u.game-state  ?:  =(+.ship-to-move our.bowl)
-                                         (fen-to-position (tail (rear (snip (snip moves.game)))))
-                                       (fen-to-position (tail (rear (snip moves.game))))
+                                         (fen-to-position (head (tail (rear (snip (snip moves.game))))))
+                                       (fen-to-position (head (tail (rear (snip moves.game)))))
                 got-undo-request.u.game-state  |
               ==
               %=  this
@@ -1155,7 +1155,8 @@
     [~ ~]
   =/  updated-game  `chess-game`game.game-state
   =/  fen  (position-to-fen u.new-position)
-  =.  moves.updated-game  (snoc moves.updated-game [move fen])
+  =/  san  (~(algebraicize with-position position.game-state) move)
+  =.  moves.updated-game  (snoc moves.updated-game [move fen san])
   =/  new-fen-repetition  (increment-repetition fen-repetition.game-state u.new-position)
   =/  in-checkmate  ~(in-checkmate with-position u.new-position)
   =/  in-stalemate  ?:  in-checkmate
@@ -1171,7 +1172,7 @@
         %fact
         ~[/game/(scot %da game-id.game.game-state)/updates]
         %chess-update
-        !>([%position game-id.game.game-state (position-to-fen u.new-position) special-draw-available (rear (algebraicize updated-game))])
+        !>([%position game-id.game.game-state (position-to-fen u.new-position) special-draw-available san])
     ==
   ::  check if game ends by checkmate, stalemate, or special draw
   ?:  ?|  in-checkmate

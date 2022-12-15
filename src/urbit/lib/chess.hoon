@@ -1335,7 +1335,7 @@
   |=  game=chess-game
   ^-  (list @t)
   %+  spun  moves.game
-  |=  [move=[chess-move chess-fen] position=chess-position]
+  |=  [move=[chess-move chess-fen chess-san] position=chess-position]
   ^-  [@t chess-position]
   :-  (~(algebraicize with-position position) -.move)
   (need (~(apply-move with-position position) -.move))
@@ -1414,11 +1414,11 @@
       result=`%'0-1'
   :~
     ::  1. f3 e5
-     [[%move [%f %2] [%f %3] ~] 'rnbqkbnr/pppppppp/8/8/8/5P2/PPPPP1PP/RNBQKBNR b KQkq - 0 1']
-     [[%move [%e %7] [%e %5] ~] 'rnbqkbnr/pppp1ppp/8/4p3/8/5P2/PPPPP1PP/RNBQKBNR w KQkq e6 0 1']
+     [[%move [%f %2] [%f %3] ~] 'rnbqkbnr/pppppppp/8/8/8/5P2/PPPPP1PP/RNBQKBNR b KQkq - 0 1' 'f3']
+     [[%move [%e %7] [%e %5] ~] 'rnbqkbnr/pppp1ppp/8/4p3/8/5P2/PPPPP1PP/RNBQKBNR w KQkq e6 0 1' 'e5']
      ::  2. g4 Qh4#
-     [[%move [%g %2] [%g %4] ~] 'rnbqkbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq g3 0 1']
-     [[%move [%d %8] [%h %4] ~] 'rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 0 1']
+     [[%move [%g %2] [%g %4] ~] 'rnbqkbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq g3 0 1' 'g4']
+     [[%move [%d %8] [%h %4] ~] 'rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 0 1' 'Qh4#']
   ==
   ==
 --

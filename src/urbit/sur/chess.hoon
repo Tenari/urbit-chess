@@ -172,6 +172,9 @@
 ::  chess-fen is a FEN position
 +$  chess-fen  @t
 ::
+::  chess-san is one move's SAN
++$  chess-san  @t
+::
 ::  chess-game stores metadata for a game
 ::  represented by chess-position
 +$  chess-game
@@ -211,8 +214,9 @@
     black=chess-player
   ::  %'0-1'
     result=(unit chess-result)
-  ::  a list of this round's moves and corresponding fen
-    moves=(list [chess-move chess-fen])
+  ::  a list of this round's moves, with
+  ::  corresponding fen and san for each move
+    moves=(list [chess-move chess-fen chess-san])
   ==
 ::
 ::  a challenge is the challenger's side,
