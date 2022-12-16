@@ -114,11 +114,8 @@ div.game-panel .moves {
   border: 1px black solid;
 }
 
-div.game-panel .moves-divider {
-  min-height: 275px;
-  width: 1.45em;
-  position: absolute;
-  border-right: 1px black solid;
+div.game-panel .move-item span {
+  cursor: pointer;
 }
 
 div.game-panel .moves p {

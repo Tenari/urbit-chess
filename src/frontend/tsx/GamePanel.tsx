@@ -6,6 +6,9 @@ import { CHESS } from '../ts/constants/chess'
 import { Side, GameID, SAN, GameInfo, ActiveGameInfo } from '../ts/types/urbitChess'
 
 export function GamePanel () {
+  const [reviewMode, setReviewMode] = useState(false)
+  const [reviewIndex, setReviewIndex] = useState(null)
+
   const { urbit, displayGame, displayMoves, setDisplayGame, offeredDraw, practiceBoard, setPracticeBoard } = useChessStore()
   const hasGame: boolean = (displayGame !== null)
   const practiceHasMoved = (localStorage.getItem('practiceBoard') !== CHESS.defaultFEN)
@@ -28,7 +31,7 @@ export function GamePanel () {
     await pokeAction(urbit, claimSpecialDraw(gameID))
   }
 
-  const seeFEN = (index: number) => {
+  const reviewPosition = (index: number) => {
     console.log('seeFen: ' + displayGame.info.moves[index].fen)
     // sth like displayGame.position.set(displayGame.info.moves[index].fen)
     if (displayGame.position !== displayGame.info.moves[index].fen) {
@@ -41,8 +44,18 @@ export function GamePanel () {
         info: displayGame.info
       }
       setDisplayGame(pseudoGame)
-    } else {
-      // just visual changes here?
+      setReviewMode(true)
+      setReviewIndex(index)
+    }
+  }
+
+  const afterReview = (index: number) => {
+    if (reviewMode == true) {
+      if (index > reviewIndex) {
+        return true
+      } else {
+        return false
+      }
     }
   }
 
@@ -60,10 +73,11 @@ export function GamePanel () {
         {
           Array.from(displayMoves).map((ply, thisIndex, thisArray) => {
             const nextIndex: number = thisIndex + 1
+            // style={{ opacity: (showingIncoming ? 1.0 : 0.5) }}
             if (thisIndex % 2 === 0) {
               return (
-              <li>
-                <span onClick={() => seeFEN(thisIndex)}>{ply}</span> <span onClick={() => seeFEN(nextIndex)}>{(nextIndex > thisArray.length ? '' : thisArray.at(nextIndex))}</span>
+              <li className='move-item'>
+                <span onClick={() => reviewPosition(thisIndex)} style={{ opacity: (afterReview(thisIndex) ? 0.5 : 1.0) }}>{ply}</span> <span onClick={() => reviewPosition(nextIndex)} style={{ opacity: (afterReview(nextIndex) ? 0.5 : 1.0) }}>{(nextIndex > thisArray.length ? '' : thisArray.at(nextIndex))}</span>
               </li>
             )
             }
