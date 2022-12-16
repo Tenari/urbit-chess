@@ -6,10 +6,7 @@ import { CHESS } from '../ts/constants/chess'
 import { Side, GameID, SAN, GameInfo, ActiveGameInfo } from '../ts/types/urbitChess'
 
 export function GamePanel () {
-  const [reviewMode, setReviewMode] = useState(false)
-  const [reviewIndex, setReviewIndex] = useState(null)
-
-  const { urbit, displayGame, displayMoves, setDisplayGame, offeredDraw, practiceBoard, setPracticeBoard } = useChessStore()
+  const { urbit, displayGame, displayMoves, setDisplayGame, offeredDraw, practiceBoard, setPracticeBoard, reviewMode, setReviewMode, reviewIndex, setReviewIndex } = useChessStore()
   const hasGame: boolean = (displayGame !== null)
   const practiceHasMoved = (localStorage.getItem('practiceBoard') !== CHESS.defaultFEN)
   const opponent = !hasGame ? '~sampel-palnet' : (urbit.ship === displayGame.info.white.substring(1))
@@ -33,8 +30,6 @@ export function GamePanel () {
 
   const reviewPosition = (index: number) => {
     console.log('seeFen: ' + displayGame.info.moves[index].fen)
-    // sth like displayGame.position.set(displayGame.info.moves[index].fen)
-    if (displayGame.position !== displayGame.info.moves[index].fen) {
       const pseudoGame: ActiveGameInfo = {
         position: displayGame.info.moves[index].fen,
         gotDrawOffer: displayGame.gotDrawOffer,
@@ -46,10 +41,9 @@ export function GamePanel () {
       setDisplayGame(pseudoGame)
       setReviewMode(true)
       setReviewIndex(index)
-    }
   }
 
-  const afterReview = (index: number) => {
+  const afterReviewIndex = (index: number) => {
     if (reviewMode == true) {
       if (index > reviewIndex) {
         return true
@@ -77,7 +71,7 @@ export function GamePanel () {
             if (thisIndex % 2 === 0) {
               return (
               <li className='move-item'>
-                <span onClick={() => reviewPosition(thisIndex)} style={{ opacity: (afterReview(thisIndex) ? 0.5 : 1.0) }}>{ply}</span> <span onClick={() => reviewPosition(nextIndex)} style={{ opacity: (afterReview(nextIndex) ? 0.5 : 1.0) }}>{(nextIndex > thisArray.length ? '' : thisArray.at(nextIndex))}</span>
+                <span onClick={() => reviewPosition(thisIndex)} style={{ opacity: (afterReviewIndex(thisIndex) ? 0.5 : 1.0) }}>{ply}</span> <span onClick={() => reviewPosition(nextIndex)} style={{ opacity: (afterReviewIndex(nextIndex) ? 0.5 : 1.0) }}>{(nextIndex > thisArray.length ? '' : thisArray.at(nextIndex))}</span>
               </li>
             )
             }
