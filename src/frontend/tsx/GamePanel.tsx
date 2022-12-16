@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Chess, ChessInstance } from 'chess.js'
 import useChessStore from '../ts/state/chessStore'
 import { pokeAction, resign, offerDraw, claimSpecialDraw } from '../ts/helpers/urbitChess'
 import { CHESS } from '../ts/constants/chess'
@@ -27,6 +28,24 @@ export function GamePanel () {
     await pokeAction(urbit, claimSpecialDraw(gameID))
   }
 
+  const seeFEN = (index: number) => {
+    console.log('seeFen: ' + displayGame.info.moves[index].fen)
+    // sth like displayGame.position.set(displayGame.info.moves[index].fen)
+    if (displayGame.position !== displayGame.info.moves[index].fen) {
+      const pseudoGame: ActiveGameInfo = {
+        position: displayGame.info.moves[index].fen,
+        gotDrawOffer: displayGame.gotDrawOffer,
+        sentDrawOffer: displayGame.sentDrawOffer,
+        drawClaimAvailable: displayGame.drawClaimAvailable,
+        autoClaimSpecialDraws: displayGame.autoClaimSpecialDraws,
+        info: displayGame.info
+      }
+      setDisplayGame(pseudoGame)
+    } else {
+      // just visual changes here?
+    }
+  }
+
   return (
     <div className='game-panel-container col'>
       <div className="game-panel col">
@@ -44,7 +63,7 @@ export function GamePanel () {
             if (thisIndex % 2 === 0) {
               return (
               <li>
-                <span>{ply}</span> <span>{(nextIndex > thisArray.length ? '' : thisArray.at(nextIndex))}</span>
+                <span onClick={() => seeFEN(thisIndex)}>{ply}</span> <span onClick={() => seeFEN(nextIndex)}>{(nextIndex > thisArray.length ? '' : thisArray.at(nextIndex))}</span>
               </li>
             )
             }
