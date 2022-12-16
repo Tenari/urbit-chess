@@ -40,7 +40,7 @@ export function Chessboard () {
   const [chess, setChess] = useState<ChessInstance>(new Chess())
   const [promotionMove, setPromotionMove] = useState<PromotionMove | null>(null)
   const [renderWorkaround, forceRenderWorkaround] = useState<number>(Date.now())
-  const { urbit, displayGame, declinedDraw, offeredDraw, setDisplayGame, practiceBoard, setPracticeBoard } = useChessStore()
+  const { urbit, displayGame, declinedDraw, offeredDraw, setDisplayGame, practiceBoard, setPracticeBoard, reviewMode, setReviewMode, reviewIndex, setReviewIndex } = useChessStore()
   const { pieceTheme, boardTheme } = usePreferenceStore()
 
   //
@@ -374,7 +374,7 @@ export function Chessboard () {
 
   return (
     <div className='game-container'>
-      <div className={`board-container ${boardTheme} ${pieceTheme}`}>
+      <div className={`board-container ${boardTheme} ${pieceTheme}`} style={{ pointerEvents: (reviewMode ? 'none' : 'auto') }}>
         <div ref={boardRef} className='chessboard cg-wrap' />
         { (promotionMove !== null) ? renderPromotionInterface() : <div/> }
       </div>

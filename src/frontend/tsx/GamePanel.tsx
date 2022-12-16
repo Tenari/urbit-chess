@@ -29,8 +29,9 @@ export function GamePanel () {
   }
 
   const reviewPosition = (index: number) => {
-    console.log('seeFen: ' + displayGame.info.moves[index].fen)
-      const pseudoGame: ActiveGameInfo = {
+    if (displayGame.info.moves[index].fen !== displayGame.info.moves[displayGame.info.moves.length - 1].fen) {
+      console.log('PREVIOUS POSITION')
+      const previousPosition: ActiveGameInfo = {
         position: displayGame.info.moves[index].fen,
         gotDrawOffer: displayGame.gotDrawOffer,
         sentDrawOffer: displayGame.sentDrawOffer,
@@ -38,9 +39,25 @@ export function GamePanel () {
         autoClaimSpecialDraws: displayGame.autoClaimSpecialDraws,
         info: displayGame.info
       }
-      setDisplayGame(pseudoGame)
+
       setReviewMode(true)
       setReviewIndex(index)
+      setDisplayGame(previousPosition)
+    } else {
+      console.log('CURRENT POSITION')
+      const currentPosition: ActiveGameInfo = {
+        position: displayGame.info.moves[displayGame.info.moves.length - 1].fen,
+        gotDrawOffer: displayGame.gotDrawOffer,
+        sentDrawOffer: displayGame.sentDrawOffer,
+        drawClaimAvailable: displayGame.drawClaimAvailable,
+        autoClaimSpecialDraws: displayGame.autoClaimSpecialDraws,
+        info: displayGame.info
+      }
+      
+      setReviewMode(false)
+      setReviewIndex(null)
+      setDisplayGame(currentPosition)
+    }
   }
 
   const afterReviewIndex = (index: number) => {
