@@ -53,7 +53,7 @@ export function GamePanel () {
         autoClaimSpecialDraws: displayGame.autoClaimSpecialDraws,
         info: displayGame.info
       }
-      
+
       setReviewMode(false)
       setReviewIndex(null)
       setDisplayGame(currentPosition)
@@ -61,7 +61,7 @@ export function GamePanel () {
   }
 
   const afterReviewIndex = (index: number) => {
-    if (reviewMode == true) {
+    if (reviewMode === true) {
       if (index > reviewIndex) {
         return true
       } else {
@@ -80,21 +80,21 @@ export function GamePanel () {
           <p>{opponent}</p>
         </div>
         <div className={'moves col' + (hasGame ? '' : ' hidden')}>
-        <ol>
-        {
-          Array.from(displayMoves).map((ply, thisIndex, thisArray) => {
-            const nextIndex: number = thisIndex + 1
-            // style={{ opacity: (showingIncoming ? 1.0 : 0.5) }}
-            if (thisIndex % 2 === 0) {
-              return (
-              <li className='move-item'>
-                <span onClick={() => reviewPosition(thisIndex)} style={{ opacity: (afterReviewIndex(thisIndex) ? 0.5 : 1.0) }}>{ply}</span> <span onClick={() => reviewPosition(nextIndex)} style={{ opacity: (afterReviewIndex(nextIndex) ? 0.5 : 1.0) }}>{(nextIndex > thisArray.length ? '' : thisArray.at(nextIndex))}</span>
-              </li>
-            )
+          <ol>
+            {
+              Array.from(displayMoves).map((ply, thisIndex, thisArray) => {
+                const nextIndex: number = thisIndex + 1
+                // style={{ opacity: (showingIncoming ? 1.0 : 0.5) }}
+                if (thisIndex % 2 === 0) {
+                  return (
+                    <li key={ thisIndex } className='move-item'>
+                      <span onClick={() => reviewPosition(thisIndex)} style={{ opacity: (afterReviewIndex(thisIndex) ? 0.5 : 1.0) }}>{ply}</span> <span onClick={() => reviewPosition(nextIndex)} style={{ opacity: (afterReviewIndex(nextIndex) ? 0.5 : 1.0) }}>{(nextIndex > thisArray.length ? '' : thisArray.at(nextIndex))}</span>
+                    </li>
+                  )
+                }
+              })
             }
-          })
-        }
-        </ol>
+          </ol>
         </div>
         <div id="our-player" className={'player row' + (hasGame ? '' : ' hidden')}>
           <p>~{window.ship}</p>
