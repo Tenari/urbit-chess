@@ -84,11 +84,10 @@ export function GamePanel () {
             {
               Array.from(displayMoves).map((ply, thisIndex, thisArray) => {
                 const nextIndex: number = thisIndex + 1
-                // style={{ opacity: (showingIncoming ? 1.0 : 0.5) }}
                 if (thisIndex % 2 === 0) {
                   return (
-                    <li key={ thisIndex } className='move-item'>
-                      <span onClick={() => reviewPosition(thisIndex)} style={{ opacity: (afterReviewIndex(thisIndex) ? 0.5 : 1.0) }}>{ply}</span>{ '\xa0'.repeat(6 - ply.length) }<span onClick={() => reviewPosition(nextIndex)} style={{ opacity: (afterReviewIndex(nextIndex) ? 0.5 : 1.0) }}>{(nextIndex > thisArray.length ? '' : thisArray.at(nextIndex))}</span>
+                    <li key={ thisIndex } className='move-item' style={{ opacity: (afterReviewIndex(thisIndex) ? 0.4 : 1.0) }}>
+                      <span onClick={() => reviewPosition(thisIndex)}>{ply}</span>{ '\xa0'.repeat(6 - ply.length) }<span onClick={() => reviewPosition(nextIndex)} style={{ opacity: (afterReviewIndex(thisIndex) ? 1.0 : afterReviewIndex(nextIndex) ? 0.4 : 1.0) }}>{(nextIndex > thisArray.length ? '' : thisArray.at(nextIndex))}</span>
                     </li>
                   )
                 }
