@@ -88,7 +88,7 @@ export function GamePanel () {
                 if (thisIndex % 2 === 0) {
                   return (
                     <li key={ thisIndex } className='move-item'>
-                      <span onClick={() => reviewPosition(thisIndex)} style={{ opacity: (afterReviewIndex(thisIndex) ? 0.5 : 1.0) }}>{ply}</span> <span onClick={() => reviewPosition(nextIndex)} style={{ opacity: (afterReviewIndex(nextIndex) ? 0.5 : 1.0) }}>{(nextIndex > thisArray.length ? '' : thisArray.at(nextIndex))}</span>
+                      <span onClick={() => reviewPosition(thisIndex)} style={{ opacity: (afterReviewIndex(thisIndex) ? 0.5 : 1.0) }}>{ply}</span>{ '\xa0'.repeat(6 - ply.length) }<span onClick={() => reviewPosition(nextIndex)} style={{ opacity: (afterReviewIndex(nextIndex) ? 0.5 : 1.0) }}>{(nextIndex > thisArray.length ? '' : thisArray.at(nextIndex))}</span>
                     </li>
                   )
                 }
