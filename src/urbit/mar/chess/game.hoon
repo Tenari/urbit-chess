@@ -18,15 +18,7 @@
         ['white' [%s (player-string:chess white.game)]]
         ['black' [%s (player-string:chess black.game)]]
         ['result' [%s ?~(result.game '' u.result.game)]]
-        :-  'moves'
-        :-  %a
-        %+  turn
-          moves.game
-        |=  move=[move=chess-move fen=chess-fen san=chess-san]
-        %-  pairs:enjs
-        :~  ['san' [%s san.move]]
-            ['fen' [%s fen.move]]
-        ==
+        ['moves' [%a ~]]
     ==
   --
 ++  grad  %noun

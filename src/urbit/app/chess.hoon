@@ -643,49 +643,6 @@
             rng-state  (~(put by rng-state) src.bowl final-commitment)
           ==
       ==
-    ::
-    ::  directly inject FEN positions into games (for debugging)
-    %chess-debug-inject
-      ?>  =(src.bowl our.bowl)
-      =/  action  !<([game-id=@dau game=chess-game] vase)
-      =/  new-position  (play game.action)
-      ?~  new-position
-        :_  this
-        =/  err
-          "attempted to inject illegal game"
-        :~  [%give %poke-ack `~[leaf+err]]
-        ==
-      =/  fen  (position-to-fen u.new-position)
-      :-  :~  :*  %give  %fact  ~[/game/(scot %da game-id.action)/updates]
-                  ::  XX: could replace ++rear of algebraicizing
-                  ::      whole move list with arm algebraicizing
-                  ::      just the one move
-                  %chess-update  !>([%position game-id.action fen (check-50-move-rule u.new-position) (rear (algebraicize game.action))])
-              ==
-          ==
-      %=  this
-        games  (~(put by games) game-id.action [game.action u.new-position *(map @t @ud) (check-50-move-rule u.new-position) & | | | | |])
-      ==
-    ::
-    ::  directly inject game subscriptions (for debugging)
-    %chess-debug-subscribe
-      ?>  =(src.bowl our.bowl)
-      =/  action  !<([who=ship game-id=@dau] vase)
-      :_  this
-      :~  :*  %pass  /player/(scot %da game-id.action)
-              %agent  [who.action %chess]
-              %watch  /game/(scot %da game-id.action)/moves
-          ==
-      ==
-    ::
-    ::  delete game from state (for debugging)
-    %chess-debug-zap
-      ?>  =(src.bowl our.bowl)
-      =/  action  !<(game-id=@dau vase)
-      :-  ~
-      %=  this
-        games  (~(del by games) game-id.action)
-      ==
   ==
 ++  on-watch
   |=  =path
@@ -838,7 +795,7 @@
         games  (~(put by games) u.game-id [new-game *chess-position *(map @t @ud) | & | | | | |])
       ==
     ::
-    ::  subscribe to updates on active games
+    ::  handle frontend subscription to updates on a game
     [%game @ta %updates ~]
       =/  game-id  `(unit @dau)`(slaw %da i.t.path)
       ?~  game-id

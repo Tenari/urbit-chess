@@ -49,9 +49,9 @@
             ['specialDrawAvailable' [%b special-draw-available.upd]]
             :-  'move'
             %-  pairs:enjs
-              :~  ['san' [%s san.upd]]
-                  ['fen' [%s position.upd]]
-              ==
+            :~  ['san' [%s san.upd]]
+                ['fen' [%s position.upd]]
+            ==
         ==
       %result
         %-  pairs:enjs
