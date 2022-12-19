@@ -19,7 +19,6 @@ const useChessStore = create<ChessState>((set, get) => ({
   setUrbit: (urbit: Urbit) => set({ urbit }),
   setDisplayGame: (displayGame: ActiveGameInfo | null) => {
     if (displayGame !== null) {
-      set({ displayGame })
       // XX: "GameInfo or ActiveGameInfo?" conditional logic
       //
       //     might be necessary depending on how we implement
@@ -29,9 +28,9 @@ const useChessStore = create<ChessState>((set, get) => ({
         get().displayMoves.push(move.san)
       }
     } else {
-      set({ displayGame })
       get().setDisplayMoves([])
     }
+    set({ displayGame })
   },
   setDisplayMoves: (displayMoves: Array<SAN>) =>
     set(state => ({ displayMoves })),
