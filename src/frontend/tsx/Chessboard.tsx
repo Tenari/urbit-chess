@@ -40,7 +40,7 @@ export function Chessboard () {
   const [chess, setChess] = useState<ChessInstance>(new Chess())
   const [promotionMove, setPromotionMove] = useState<PromotionMove | null>(null)
   const [renderWorkaround, forceRenderWorkaround] = useState<number>(Date.now())
-  const { urbit, displayGame, declinedDraw, offeredDraw, setDisplayGame, practiceBoard, setPracticeBoard, reviewMode, setReviewMode, reviewIndex, setReviewIndex } = useChessStore()
+  const { urbit, displayGame, declinedDraw, offeredDraw, setDisplayGame, practiceBoard, setPracticeBoard, reviewMode, setReviewMode, displayIndex, setDisplayIndex } = useChessStore()
   const { pieceTheme, boardTheme } = usePreferenceStore()
 
   //

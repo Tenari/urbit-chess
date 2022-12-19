@@ -6,7 +6,7 @@ import { CHESS } from '../ts/constants/chess'
 import { Side, GameID, SAN, GameInfo, ActiveGameInfo } from '../ts/types/urbitChess'
 
 export function GamePanel () {
-  const { urbit, displayGame, displayMoves, setDisplayGame, offeredDraw, practiceBoard, setPracticeBoard, reviewMode, setReviewMode, reviewIndex, setReviewIndex } = useChessStore()
+  const { urbit, displayGame, displayMoves, setDisplayGame, offeredDraw, practiceBoard, setPracticeBoard, reviewMode, setReviewMode, displayIndex, setDisplayIndex } = useChessStore()
   const hasGame: boolean = (displayGame !== null)
   const practiceHasMoved = (localStorage.getItem('practiceBoard') !== CHESS.defaultFEN)
   const opponent = !hasGame ? '~sampel-palnet' : (urbit.ship === displayGame.info.white.substring(1))
@@ -41,7 +41,7 @@ export function GamePanel () {
       }
 
       setReviewMode(true)
-      setReviewIndex(index)
+      setDisplayIndex(index)
       setDisplayGame(previousPosition)
     } else {
       console.log('CURRENT POSITION')
@@ -55,14 +55,14 @@ export function GamePanel () {
       }
 
       setReviewMode(false)
-      setReviewIndex(null)
+      setDisplayIndex(null)
       setDisplayGame(currentPosition)
     }
   }
 
   const afterReviewIndex = (index: number) => {
     if (reviewMode === true) {
-      if (index > reviewIndex) {
+      if (index > displayIndex) {
         return true
       } else {
         return false

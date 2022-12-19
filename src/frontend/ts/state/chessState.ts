@@ -11,7 +11,7 @@ interface ChessState {
   outgoingChallenges: Map<Ship, Challenge>
   friends: Array<Ship>
   reviewMode: boolean
-  reviewIndex: number | null
+  displayIndex: number | null
 
   setUrbit: (urbit: Urbit) => void
   setDisplayGame: (displayGame: ActiveGameInfo | null) => void
@@ -24,7 +24,7 @@ interface ChessState {
   declinedDraw: (gameID: GameID) => void
   offeredDraw: (gameID: GameID) => void
   setReviewMode: (reviewMode: boolean) => void
-  setReviewIndex: (reviewIndex: number | null) => void
+  setDisplayIndex: (displayIndex: number | null) => void
 }
 
 export default ChessState
