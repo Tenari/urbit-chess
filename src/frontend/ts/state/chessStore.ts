@@ -14,7 +14,6 @@ const useChessStore = create<ChessState>((set, get) => ({
   incomingChallenges: new Map(),
   outgoingChallenges: new Map(),
   friends: [],
-  reviewMode: false,
   displayIndex: null,
   setUrbit: (urbit: Urbit) => set({ urbit }),
   setDisplayGame: (displayGame: ActiveGameInfo | null) => {
@@ -94,6 +93,7 @@ const useChessStore = create<ChessState>((set, get) => ({
 
       if ((displayGame !== null) && (updatedGame.info.gameID === displayGame.info.gameID)) {
         get().setDisplayGame(updatedGame)
+        get().setDisplayIndex(updatedGame.info.moves.length)
       }
     }
 
@@ -225,9 +225,6 @@ const useChessStore = create<ChessState>((set, get) => ({
     updatedGame.sentDrawOffer = true
 
     set(state => ({ activeGames: state.activeGames.set(gameID, updatedGame) }))
-  },
-  setReviewMode: (reviewMode: boolean) => {
-    set({ reviewMode })
   },
   setDisplayIndex: (displayIndex: number | null) => {
     set({ displayIndex })

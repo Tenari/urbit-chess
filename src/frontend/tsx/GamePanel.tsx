@@ -6,7 +6,7 @@ import { CHESS } from '../ts/constants/chess'
 import { Side, GameID, SAN, GameInfo, ActiveGameInfo } from '../ts/types/urbitChess'
 
 export function GamePanel () {
-  const { urbit, displayGame, displayMoves, setDisplayGame, offeredDraw, practiceBoard, setPracticeBoard, reviewMode, setReviewMode, displayIndex, setDisplayIndex } = useChessStore()
+  const { urbit, displayGame, displayMoves, setDisplayGame, offeredDraw, practiceBoard, setPracticeBoard, displayIndex, setDisplayIndex } = useChessStore()
   const hasGame: boolean = (displayGame !== null)
   const practiceHasMoved = (localStorage.getItem('practiceBoard') !== CHESS.defaultFEN)
   const opponent = !hasGame ? '~sampel-palnet' : (urbit.ship === displayGame.info.white.substring(1))
@@ -28,46 +28,12 @@ export function GamePanel () {
     await pokeAction(urbit, claimSpecialDraw(gameID))
   }
 
-  const reviewPosition = (index: number) => {
-    if (displayGame.info.moves[index].fen !== displayGame.info.moves[displayGame.info.moves.length - 1].fen) {
-      console.log('PREVIOUS POSITION')
-      const previousPosition: ActiveGameInfo = {
-        position: displayGame.info.moves[index].fen,
-        gotDrawOffer: displayGame.gotDrawOffer,
-        sentDrawOffer: displayGame.sentDrawOffer,
-        drawClaimAvailable: displayGame.drawClaimAvailable,
-        autoClaimSpecialDraws: displayGame.autoClaimSpecialDraws,
-        info: displayGame.info
-      }
-
-      setReviewMode(true)
-      setDisplayIndex(index)
-      setDisplayGame(previousPosition)
-    } else {
-      console.log('CURRENT POSITION')
-      const currentPosition: ActiveGameInfo = {
-        position: displayGame.info.moves[displayGame.info.moves.length - 1].fen,
-        gotDrawOffer: displayGame.gotDrawOffer,
-        sentDrawOffer: displayGame.sentDrawOffer,
-        drawClaimAvailable: displayGame.drawClaimAvailable,
-        autoClaimSpecialDraws: displayGame.autoClaimSpecialDraws,
-        info: displayGame.info
-      }
-
-      setReviewMode(false)
-      setDisplayIndex(null)
-      setDisplayGame(currentPosition)
-    }
-  }
-
-  const afterReviewIndex = (index: number) => {
-    if (reviewMode === true) {
+  const moveOpacity = (index: number) => {
       if (index > displayIndex) {
-        return true
+        return 0.4
       } else {
-        return false
+        return 1.0
       }
-    }
   }
 
   return (
@@ -81,18 +47,40 @@ export function GamePanel () {
         </div>
         <div className={'moves col' + (hasGame ? '' : ' hidden')}>
           <ol>
-            {
-              Array.from(displayMoves).map((ply, thisIndex, thisArray) => {
-                const nextIndex: number = thisIndex + 1
-                if (thisIndex % 2 === 0) {
+          {
+            Array.from(displayMoves).map((ply, index, thisArray) => {
+              if (index % 2 === 0) {
+                // XX: am i getting ply and move mixed up?
+                const move: number = (index / 2) + 1
+                const wIndex: number = index
+                const bIndex: number = wIndex + 1
+                const wMove: SAN = displayMoves[wIndex]
+                const bMove: SAN = displayMoves[bIndex]
+
+                if (bIndex > displayMoves.length) {
                   return (
-                    <li key={ thisIndex } className='move-item' style={{ opacity: (afterReviewIndex(thisIndex) ? 0.4 : 1.0) }}>
-                      <span onClick={() => reviewPosition(thisIndex)}>{ply}</span>{ '\xa0'.repeat(6 - ply.length) }<span onClick={() => reviewPosition(nextIndex)} style={{ opacity: (afterReviewIndex(thisIndex) ? 1.0 : afterReviewIndex(nextIndex) ? 0.4 : 1.0) }}>{(nextIndex > thisArray.length ? '' : thisArray.at(nextIndex))}</span>
+                    <li key={ move } className='move-item' style={{ opacity: moveOpacity(wIndex) }}>
+                      <span onClick={ () => setDisplayIndex(wIndex) }>
+                        { wMove }
+                      </span>
+                    </li>
+                  )
+                } else {
+                  return (
+                    <li key={ move } className='move-item' style={{ opacity: moveOpacity(wIndex) }}>
+                      <span onClick={ () => setDisplayIndex(wIndex) }>
+                        { wMove }
+                      </span>
+                      { '\xa0'.repeat(6 - wMove.length) }
+                      <span onClick={ () => setDisplayIndex(bIndex) } style={{ opacity: (wIndex <= displayIndex && bIndex > displayIndex) ? 0.4 : 1.0}}>
+                        { bMove }
+                      </span>
                     </li>
                   )
                 }
-              })
-            }
+              }
+            })
+          }
           </ol>
         </div>
         <div id="our-player" className={'player row' + (hasGame ? '' : ' hidden')}>
