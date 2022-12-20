@@ -813,10 +813,26 @@
       =/  game-state  (~(got by games) u.game-id)
       =/  fen  (position-to-fen position.game-state)
       =/  cards  ^-  (list card)
-        :~  :*  %give  %fact  ~[/game/(scot %da u.game-id)/updates]
-                %chess-update  !>([%position u.game-id fen special-draw-available.game-state ~])
-            ==
-        ==
+         ::  :-  'moves'
+         ::  :-  %a
+         ::  %+  turn
+         ::    moves.game
+         ::  |=  move=[move=chess-move fen=chess-fen san=chess-san]
+         ::  %-  pairs:enjs
+         ::  :~  ['san' [%s san.move]]
+         ::      ['fen' [%s fen.move]]
+         ::  ==
+         ::
+         ::  :~  :*  %give  %fact  ~[/game/(scot %da u.game-id)/updates]
+         ::          %chess-update  !>([%position u.game-id fen special-draw-available.game-state ~])
+         ::      ==
+         ::  ==
+         %+  turn
+           moves.game.game-state
+         |=  move=[move=chess-move fen=chess-fen san=chess-san]
+         :*  %give  %fact   ~[/game/(scot %da u.game-id)/updates]
+             %chess-update  !>([%position u.game-id fen.move | san.move])
+         ==
       =?  cards  got-draw-offer.game-state
         :_  cards
         :*  %give  %fact  ~[/game/(scot %da u.game-id)/updates]
