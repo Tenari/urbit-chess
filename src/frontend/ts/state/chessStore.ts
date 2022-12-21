@@ -109,12 +109,12 @@ const useChessStore = create<ChessState>((set, get) => ({
         if (move.san !== '' && move.fen !== '') {
           currentGame.info.moves.push(move)
 
-          // XX: create and append to array
-          // if (get().activeGameMoves.get(gameID) === null) {
-          //   get().activeGameMoves.set(gameID, [move])
-          // } else {
-          //   get().activeGameMoves.get(gameID).push(move)
-          // }
+          if (activeGameMoves.has(gameID) === false) {
+            activeGameMoves.set(gameID, [move])
+          } else {
+            activeGameMoves.get(gameID).push(move)
+            set({ activeGameMoves })
+          }
 
           const updatedGame: ActiveGameInfo = {
           position: move.fen,
@@ -129,8 +129,6 @@ const useChessStore = create<ChessState>((set, get) => ({
           updateDisplayGame(updatedGame)
 
           console.log('RECEIVED POSITION UPDATE')
-        } else {
-          console.log('RECEIVED BAD POSITION UPDATE')
         }
 
         break
