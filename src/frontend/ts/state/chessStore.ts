@@ -1,7 +1,7 @@
 import create from 'zustand'
 import Urbit from '@urbit/http-api'
 import { CHESS } from '../constants/chess'
-import { Update, Ship, GameID, SAN, FENPosition, GameInfo, ActiveGameInfo, Challenge, ChessUpdate, ChallengeUpdate, ChallengeSentUpdate, ChallengeReceivedUpdate, PositionUpdate, ResultUpdate, DrawOfferUpdate, DrawDeclinedUpdate, SpecialDrawPreferenceUpdate } from '../types/urbitChess'
+import { Update, Ship, GameID, SAN, FENPosition, Move, GameInfo, ActiveGameInfo, Challenge, ChessUpdate, ChallengeUpdate, ChallengeSentUpdate, ChallengeReceivedUpdate, PositionUpdate, ResultUpdate, DrawOfferUpdate, DrawDeclinedUpdate, SpecialDrawPreferenceUpdate } from '../types/urbitChess'
 import { findFriends } from '../helpers/urbitChess'
 import ChessState from './chessState'
 
@@ -11,6 +11,7 @@ const useChessStore = create<ChessState>((set, get) => ({
   displayMoves: [],
   practiceBoard: '',
   activeGames: new Map(),
+  activeGameMoves: new Map(),
   incomingChallenges: new Map(),
   outgoingChallenges: new Map(),
   friends: [],
@@ -101,28 +102,37 @@ const useChessStore = create<ChessState>((set, get) => ({
       case Update.Position: {
         const positionData = data as PositionUpdate
         const gameID = positionData.gameID
-        const specialDrawAvailable = positionData.specialDrawAvailable
+        const move = positionData.move
         const currentGame = get().activeGames.get(gameID)
-        if (positionData.move.san !== '') {
-          console.log('receiveUpdate san: ' + positionData.move.san)
-          console.log('receiveUpdate fen: ' + positionData.move.fen)
-          currentGame.info.moves.push(positionData.move)
-        }
-        const updatedGame: ActiveGameInfo = {
-          position: positionData.position,
+        const activeGameMoves = get().activeGameMoves
+
+        if (move.san !== '' && move.fen !== '') {
+          currentGame.info.moves.push(move)
+
+          // XX: create and append to array
+          // if (get().activeGameMoves.get(gameID) === null) {
+          //   get().activeGameMoves.set(gameID, [move])
+          // } else {
+          //   get().activeGameMoves.get(gameID).push(move)
+          // }
+
+          const updatedGame: ActiveGameInfo = {
+          position: move.fen,
           gotDrawOffer: currentGame.gotDrawOffer,
           sentDrawOffer: currentGame.sentDrawOffer,
-          drawClaimAvailable: specialDrawAvailable,
+          drawClaimAvailable: positionData.specialDrawAvailable,
           autoClaimSpecialDraws: currentGame.autoClaimSpecialDraws,
           info: currentGame.info
+          }
+
+          set(state => ({ activeGames: state.activeGames.set(gameID, updatedGame) }))
+          updateDisplayGame(updatedGame)
+
+          console.log('RECEIVED POSITION UPDATE')
+        } else {
+          console.log('RECEIVED BAD POSITION UPDATE')
         }
 
-        set(state => ({ activeGames: state.activeGames.set(gameID, updatedGame) }))
-        updateDisplayGame(updatedGame)
-
-        // DD
-        // console.log('RECEIVED POSITION UPDATE: ' + updatedGame.info.moves)
-        console.log('RECEIVED POSITION UPDATE')
         break
       }
 
