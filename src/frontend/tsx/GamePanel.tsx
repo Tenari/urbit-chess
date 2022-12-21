@@ -49,16 +49,46 @@ export function GamePanel () {
           <ol>
           {
             Array.from(displayMoves).map((ply, index, thisArray) => {
-              if (index % 2 === 0) {
-                // XX: am i getting ply and move mixed up?
-                const move: number = (index / 2) + 1
-                const wIndex: number = index
-                const bIndex: number = wIndex + 1
-                const wMove: SAN = displayMoves[wIndex]
-                const bMove: SAN = displayMoves[bIndex]
+              // if (index % 2 === 0) {
+              //   // XX: am i getting ply and move mixed up?
+              //   const move: number = (index / 2) + 1
+              //   const wIndex: number = index
+              //   const bIndex: number = wIndex + 1
+              //   const wMove: SAN = displayMoves[wIndex]
+              //   const bMove: SAN = displayMoves[bIndex]
+
+              //   if (bIndex > displayMoves.length) {
+              //     return (
+              //       <li key={ move } className='move-item' style={{ opacity: moveOpacity(wIndex) }}>
+              //         <span onClick={ () => setDisplayIndex(wIndex) }>
+              //           { wMove }
+              //         </span>
+              //       </li>
+              //     )
+              //   } else {
+              //     return (
+              //       <li key={ move } className='move-item' style={{ opacity: moveOpacity(wIndex) }}>
+              //         <span onClick={ () => setDisplayIndex(wIndex) }>
+              //           { wMove }
+              //         </span>
+              //         { '\xa0'.repeat(6 - wMove.length) }
+              //         <span onClick={ () => setDisplayIndex(bIndex) } style={{ opacity: (wIndex <= displayIndex && bIndex > displayIndex) ? 0.4 : 1.0}}>
+              //           { bMove }
+              //         </span>
+              //       </li>
+              //     )
+              //   }
+              // }
+              let components = [];
+              for (let i: number = 0; i < displayMoves.length; i += 2) {
+                const move: number = (i / 2) + 1
+                const wIndex: number = i
+                const bIndex: number = i + 1
+                const wMove: SAN = displayMoves[i]
+                const bMove: SAN = displayMoves[i + 1]
 
                 if (bIndex > displayMoves.length) {
-                  return (
+                  components.push(
                     <li key={ move } className='move-item' style={{ opacity: moveOpacity(wIndex) }}>
                       <span onClick={ () => setDisplayIndex(wIndex) }>
                         { wMove }
@@ -66,7 +96,7 @@ export function GamePanel () {
                     </li>
                   )
                 } else {
-                  return (
+                  components.push(
                     <li key={ move } className='move-item' style={{ opacity: moveOpacity(wIndex) }}>
                       <span onClick={ () => setDisplayIndex(wIndex) }>
                         { wMove }
@@ -79,6 +109,7 @@ export function GamePanel () {
                   )
                 }
               }
+              return components
             })
           }
           </ol>
