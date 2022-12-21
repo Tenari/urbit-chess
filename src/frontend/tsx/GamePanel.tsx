@@ -30,7 +30,7 @@ export function GamePanel () {
 
   const moveOpacity = (index: number) => {
       if (index > displayIndex) {
-        return 0.4
+        return 0.3
       } else {
         return 1.0
       }
@@ -60,14 +60,14 @@ export function GamePanel () {
               { wMove }
             </span>
             { '\xa0'.repeat(6 - wMove.length) }
-            <span onClick={ () => setDisplayIndex(bIndex) } style={{ opacity: (wIndex <= displayIndex && bIndex > displayIndex) ? 0.4 : 1.0}}>
+            <span onClick={ () => setDisplayIndex(bIndex) } style={{ opacity: (wIndex <= displayIndex && bIndex > displayIndex) ? 0.3 : 1.0}}>
               { bMove }
             </span>
           </li>
         )
       }
     }
-    
+
     return components
   }
 
