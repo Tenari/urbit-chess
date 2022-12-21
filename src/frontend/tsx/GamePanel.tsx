@@ -38,12 +38,11 @@ export function GamePanel () {
 
   const moveList = () => {
     let components = [];
-    for (let i: number = 0; i < displayMoves.length; i += 2) {
-      const move: number = (i / 2) + 1
-      const wIndex: number = i
-      const bIndex: number = i + 1
-      const wMove: SAN = displayMoves[i]
-      const bMove: SAN = displayMoves[i + 1]
+    for (let wIndex: number = 0; wIndex < displayMoves.length; wIndex += 2) {
+      const move: number = (wIndex / 2) + 1
+      const bIndex: number = wIndex + 1
+      const wMove: SAN = displayMoves[wIndex]
+      const bMove: SAN = displayMoves[wIndex + 1]
 
       if (bIndex > displayMoves.length) {
         components.push(
