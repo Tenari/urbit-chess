@@ -32,7 +32,7 @@ export function Games () {
                 key={key}
                 className={`game active ${colorClass} ${status}`}
                 title={gameID}
-                onClick={() => { setDisplayGame(activeGame); setDisplayIndex(activeGame.info.moves.length) }}>
+                onClick={() => { setDisplayGame(activeGame); setDisplayIndex(activeGame.info.moves.length - 1) }}>
                 <div className='row'>
                   <piece className={`game-icon ${mySide} knight`}/>
                   <div className='col game-card'>
