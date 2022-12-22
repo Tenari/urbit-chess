@@ -192,17 +192,6 @@ export function Chessboard () {
         showDests: (displayIndex == null) ? true : (displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1) ? false : true,
       }
     }
-
-    if (displayGame !== null) {
-      console.log('activeGameMoves array length: ' + activeGameMoves.get(displayGame.info.gameID).length)
-      console.log('displayIndex: ' + displayIndex)
-    }
-
-    if (displayIndex !== null && displayGame !== null) {
-      console.log('activeGameMoves displayIndex - 1: ' + activeGameMoves.get(displayGame.info.gameID)[displayIndex - 1])
-      console.log('activeGameMoves displayIndex: ' + activeGameMoves.get(displayGame.info.gameID)[displayIndex])
-    }
-
     api?.set(stateConfig)
   }
 
