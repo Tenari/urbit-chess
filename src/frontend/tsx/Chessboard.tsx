@@ -13,7 +13,7 @@ import { pokeAction, move, castle, acceptDraw, declineDraw, claimSpecialDraw } f
 import useChessStore from '../ts/state/chessStore'
 import usePreferenceStore from '../ts/state/preferenceStore'
 import { PromotionMove } from '../ts/types/chessground'
-import { Side, CastleSide, PromotionRole, Rank, File, GameID, ActiveGameInfo } from '../ts/types/urbitChess'
+import { Side, CastleSide, PromotionRole, Rank, File, GameID, GameInfo, ActiveGameInfo } from '../ts/types/urbitChess'
 
 //
 // Declare custom HTML elements used by Chessground
@@ -182,13 +182,32 @@ export function Chessboard () {
 
   const updateBoard = () => {
     const stateConfig: CgConfig = {
-      fen: chess.fen(),
+      // fen: chess.fen(),
+      // problem is fen: line
+      // problem is addressing the array, why console logs don't work
+      fen: (displayIndex == null || displayGame == null) ? chess.fen() : activeGameMoves.get(displayGame.info.gameID)[displayIndex].fen,
+      viewOnly: (displayIndex == null) ? false : (displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1) ? true : false,
       turnColor: sideToMove as cg.Color,
       check: chess.in_check(),
       movable: {
         dests: getChessDests(chess) as cg.Dests
       }
     }
+    console.log('displayIndex: ' + displayIndex) // fine
+    console.log('activeGameMoves: ' + activeGameMoves) // fine
+    // console.log('activeGameMoves length: ' + activeGameMoves.get(displayGame.info.gameID).length) // break
+    // console.log('gameID: ' + activeGameMoves.get(displayGame.info.gameID)) // breaks
+    console.log('displayGame: ' + displayGame) // fine
+    // console.log('displayGame.info: ' + displayGame.info) // BREAKS
+    if (displayGame === null) {
+      console.log('displayGame is null!')
+    } else {
+      console.log('displayGame.info: ' + displayGame.info)
+    }
+    // is there a point at which displayGame.info is null?
+    // console.log('displayGame.info.gameID: ' + displayGame.info.gameID)
+
+
     api?.set(stateConfig)
   }
 

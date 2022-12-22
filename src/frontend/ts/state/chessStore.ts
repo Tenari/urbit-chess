@@ -116,6 +116,12 @@ const useChessStore = create<ChessState>((set, get) => ({
             set({ activeGameMoves })
           }
 
+          if (get().displayIndex == get().displayMoves.length - 1) {
+            get().setDisplayIndex(get().displayIndex + 1)
+          } else {
+            null
+          }
+
           const updatedGame: ActiveGameInfo = {
           position: move.fen,
           gotDrawOffer: currentGame.gotDrawOffer,
