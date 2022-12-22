@@ -182,9 +182,6 @@ export function Chessboard () {
 
   const updateBoard = () => {
     const stateConfig: CgConfig = {
-      // fen: chess.fen(),
-      // problem is fen: line
-      // problem is addressing the array, why console logs don't work
       fen: (displayIndex == null || displayGame == null) ? chess.fen() : activeGameMoves.get(displayGame.info.gameID)[displayIndex].fen,
       viewOnly: (displayIndex == null) ? false : (displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1) ? true : false,
       turnColor: sideToMove as cg.Color,
@@ -203,7 +200,6 @@ export function Chessboard () {
       console.log('activeGameMoves displayIndex - 1: ' + activeGameMoves.get(displayGame.info.gameID)[displayIndex - 1])
       console.log('activeGameMoves displayIndex: ' + activeGameMoves.get(displayGame.info.gameID)[displayIndex])
     }
-
 
     api?.set(stateConfig)
   }
