@@ -116,12 +116,6 @@ const useChessStore = create<ChessState>((set, get) => ({
             set({ activeGameMoves })
           }
 
-          if (get().displayIndex < get().displayMoves.length - 1) {
-            get().setDisplayIndex(get().displayMoves.length - 1)
-          } else {
-            null
-          }
-
           const updatedGame: ActiveGameInfo = {
           position: move.fen,
           gotDrawOffer: currentGame.gotDrawOffer,
@@ -133,6 +127,10 @@ const useChessStore = create<ChessState>((set, get) => ({
 
           set(state => ({ activeGames: state.activeGames.set(gameID, updatedGame) }))
           updateDisplayGame(updatedGame)
+
+          if (get().displayMoves.length > 0) {
+            get().setDisplayIndex(get().displayMoves.length - 1)
+          }
 
           console.log('RECEIVED POSITION UPDATE')
         }
