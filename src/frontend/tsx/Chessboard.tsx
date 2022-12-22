@@ -252,6 +252,12 @@ export function Chessboard () {
   useEffect(
     () => {
       updateBoard()
+    },
+    [displayIndex])
+
+  useEffect(
+    () => {
+      updateBoard()
       savePracticeBoard()
     },
     [promotionMove, renderWorkaround])
