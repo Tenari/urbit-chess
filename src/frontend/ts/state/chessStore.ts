@@ -242,6 +242,7 @@ const useChessStore = create<ChessState>((set, get) => ({
   },
   setDisplayIndex: (displayIndex: number | null) => {
     set({ displayIndex })
+    console.log('setDisplayIndex: ' + displayIndex)
   }
 }))
 

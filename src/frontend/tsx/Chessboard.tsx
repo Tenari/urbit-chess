@@ -193,19 +193,16 @@ export function Chessboard () {
         dests: getChessDests(chess) as cg.Dests
       }
     }
-    console.log('displayIndex: ' + displayIndex) // fine
-    console.log('activeGameMoves: ' + activeGameMoves) // fine
-    // console.log('activeGameMoves length: ' + activeGameMoves.get(displayGame.info.gameID).length) // break
-    // console.log('gameID: ' + activeGameMoves.get(displayGame.info.gameID)) // breaks
-    console.log('displayGame: ' + displayGame) // fine
-    // console.log('displayGame.info: ' + displayGame.info) // BREAKS
-    if (displayGame === null) {
-      console.log('displayGame is null!')
-    } else {
-      console.log('displayGame.info: ' + displayGame.info)
+
+    if (displayGame !== null) {
+      console.log('activeGameMoves array length: ' + activeGameMoves.get(displayGame.info.gameID).length)
+      console.log('displayIndex: ' + displayIndex)
     }
-    // is there a point at which displayGame.info is null?
-    // console.log('displayGame.info.gameID: ' + displayGame.info.gameID)
+
+    if (displayIndex !== null && displayGame !== null) {
+      console.log('activeGameMoves displayIndex - 1: ' + activeGameMoves.get(displayGame.info.gameID)[displayIndex - 1])
+      console.log('activeGameMoves displayIndex: ' + activeGameMoves.get(displayGame.info.gameID)[displayIndex])
+    }
 
 
     api?.set(stateConfig)
