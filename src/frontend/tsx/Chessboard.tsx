@@ -62,6 +62,16 @@ export function Chessboard () {
       ? `${CHESS.pieceWhiteKnight} ${displayGame.info.white} vs. ${CHESS.pieceBlackKnight} ${displayGame.info.black}`
       : `${CHESS.pieceBlackKnight} ${displayGame.info.black} vs. ${CHESS.pieceWhiteKnight} ${displayGame.info.white}`
     : `~${window.ship}'s practice board`
+  const isViewOnly = (displayIndex == null)
+    ? false
+    : (displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1)
+    ? true
+    : false
+  const toShowDests = (displayIndex == null)
+    ? true
+    : (displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1)
+    ? false
+    : true
 
   //
   // React hook helper functions
@@ -183,13 +193,13 @@ export function Chessboard () {
   const updateBoard = () => {
     const stateConfig: CgConfig = {
       fen: (displayIndex == null || displayGame == null) ? chess.fen() : activeGameMoves.get(displayGame.info.gameID)[displayIndex].fen,
-      viewOnly: (displayIndex == null) ? false : (displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1) ? true : false,
+      viewOnly: isViewOnly,
       turnColor: sideToMove as cg.Color,
       check: chess.in_check(),
       selected: null,
       movable: {
         dests: getChessDests(chess) as cg.Dests,
-        showDests: (displayIndex == null) ? true : (displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1) ? false : true,
+        showDests: toShowDests,
       }
     }
     api?.set(stateConfig)
