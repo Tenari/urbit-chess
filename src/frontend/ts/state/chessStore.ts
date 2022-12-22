@@ -29,6 +29,7 @@ const useChessStore = create<ChessState>((set, get) => ({
       }
     } else {
       get().setDisplayMoves([])
+      get().setDisplayIndex(null)
     }
     set({ displayGame })
   },

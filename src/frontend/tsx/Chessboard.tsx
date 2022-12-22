@@ -192,7 +192,7 @@ export function Chessboard () {
 
   const updateBoard = () => {
     const stateConfig: CgConfig = {
-      fen: (displayIndex == null || displayGame == null) ? chess.fen() : activeGameMoves.get(displayGame.info.gameID)[displayIndex].fen,
+      fen: (displayIndex == null) ? chess.fen() : activeGameMoves.get(displayGame.info.gameID)[displayIndex].fen,
       viewOnly: isViewOnly,
       turnColor: sideToMove as cg.Color,
       check: chess.in_check(),
