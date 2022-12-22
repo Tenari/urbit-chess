@@ -186,6 +186,7 @@ export function Chessboard () {
       viewOnly: (displayIndex == null) ? false : (displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1) ? true : false,
       turnColor: sideToMove as cg.Color,
       check: chess.in_check(),
+      selected: null,
       movable: {
         dests: getChessDests(chess) as cg.Dests,
         showDests: (displayIndex == null) ? true : (displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1) ? false : true,
