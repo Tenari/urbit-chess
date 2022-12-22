@@ -817,7 +817,7 @@
            moves.game.game-state
          |=  move=[move=chess-move fen=chess-fen san=chess-san]
          :*  %give  %fact   ~[/game/(scot %da u.game-id)/updates]
-             %chess-update  !>([%position u.game-id fen.move | san.move])
+             %chess-update  !>([%position u.game-id fen.move special-draw-available.game-state san.move])
          ==
       =?  cards  got-draw-offer.game-state
         :_  cards
