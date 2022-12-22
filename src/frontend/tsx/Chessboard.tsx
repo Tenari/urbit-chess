@@ -187,7 +187,8 @@ export function Chessboard () {
       turnColor: sideToMove as cg.Color,
       check: chess.in_check(),
       movable: {
-        dests: getChessDests(chess) as cg.Dests
+        dests: getChessDests(chess) as cg.Dests,
+        showDests: (displayIndex == null) ? true : (displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1) ? false : true,
       }
     }
 
