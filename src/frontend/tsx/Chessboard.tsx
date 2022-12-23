@@ -178,7 +178,9 @@ export function Chessboard () {
               attemptMove(orig, dest)
             }
 
-            forceRenderWorkaround(Date.now())
+            if (displayGame == null) {
+              forceRenderWorkaround(Date.now())
+            }
           }
         }
       }
@@ -214,7 +216,9 @@ export function Chessboard () {
     if (practiceBoard === null) {
       localStorage.removeItem('practiceBoard')
       chess.load(CHESS.defaultFEN)
-      forceRenderWorkaround(Date.now())
+      if (displayGame == null) {
+        forceRenderWorkaround(Date.now())
+      }
       const config: CgConfig = {
         lastMove: null
       }
