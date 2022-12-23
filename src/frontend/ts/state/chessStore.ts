@@ -117,12 +117,12 @@ const useChessStore = create<ChessState>((set, get) => ({
           }
 
           const updatedGame: ActiveGameInfo = {
-          position: move.fen,
-          gotDrawOffer: currentGame.gotDrawOffer,
-          sentDrawOffer: currentGame.sentDrawOffer,
-          drawClaimAvailable: positionData.specialDrawAvailable,
-          autoClaimSpecialDraws: currentGame.autoClaimSpecialDraws,
-          info: currentGame.info
+            position: move.fen,
+            gotDrawOffer: currentGame.gotDrawOffer,
+            sentDrawOffer: currentGame.sentDrawOffer,
+            drawClaimAvailable: positionData.specialDrawAvailable,
+            autoClaimSpecialDraws: currentGame.autoClaimSpecialDraws,
+            info: currentGame.info
           }
 
           set(state => ({ activeGames: state.activeGames.set(gameID, updatedGame) }))

@@ -65,13 +65,9 @@ export function Chessboard () {
   const isViewOnly = (displayIndex == null)
     ? false
     : (displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1)
-    ? true
-    : false
   const toShowDests = (displayIndex == null)
     ? true
-    : (displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1)
-    ? false
-    : true
+    : !((displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1))
 
   //
   // React hook helper functions
@@ -199,7 +195,7 @@ export function Chessboard () {
       selected: null,
       movable: {
         dests: getChessDests(chess) as cg.Dests,
-        showDests: toShowDests,
+        showDests: toShowDests
       }
     }
     console.log('updateBoard fen: ' + stateConfig.fen)
