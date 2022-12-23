@@ -202,6 +202,8 @@ export function Chessboard () {
         showDests: toShowDests,
       }
     }
+    console.log('updateBoard fen: ' + stateConfig.fen)
+    console.log('updateBoard displayIndex: ' + displayIndex)
     api?.set(stateConfig)
   }
 

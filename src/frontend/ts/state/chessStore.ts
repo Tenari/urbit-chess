@@ -94,6 +94,7 @@ const useChessStore = create<ChessState>((set, get) => ({
       if ((get().displayGame !== null) && (updatedGame.info.gameID === get().displayGame.info.gameID)) {
         get().setDisplayGame(updatedGame)
         get().setDisplayIndex(updatedGame.info.moves.length - 1)
+        console.log('updateDisplayGame displayIndex: ' + (updatedGame.info.moves.length - 1))
       }
     }
 
@@ -132,6 +133,8 @@ const useChessStore = create<ChessState>((set, get) => ({
           }
 
           console.log('RECEIVED POSITION UPDATE')
+          console.log('Update.Position displayIndex: ' + (get().displayIndex))
+          console.log('Update.Position fen: ' + move.fen)
         }
 
         break
@@ -239,6 +242,7 @@ const useChessStore = create<ChessState>((set, get) => ({
   },
   setDisplayIndex: (displayIndex: number | null) => {
     set({ displayIndex })
+    console.log('setDisplayIndex displayIndex: ' + displayIndex)
   }
 }))
 
