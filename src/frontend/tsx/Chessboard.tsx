@@ -64,9 +64,11 @@ export function Chessboard () {
     : `~${window.ship}'s practice board`
   const isViewOnly = (displayIndex == null)
     ? false
+    // XX potential error
     : (displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1)
   const toShowDests = (displayIndex == null)
     ? true
+    // XX potential error
     : !((displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1))
 
   //
@@ -118,6 +120,7 @@ export function Chessboard () {
       }
 
       const attemptUrbitMove = async (flag: string) => {
+        // XX potential error
         const gameID: GameID = displayGame.info.gameID
 
         if (flag === FLAGS.KSIDE_CASTLE) {
@@ -190,6 +193,7 @@ export function Chessboard () {
 
   const updateBoard = () => {
     const stateConfig: CgConfig = {
+      // XX potential error
       fen: (displayIndex == null) ? chess.fen() : activeGameMoves.get(displayGame.info.gameID)[displayIndex].fen,
       viewOnly: isViewOnly,
       turnColor: sideToMove as cg.Color,
@@ -280,16 +284,19 @@ export function Chessboard () {
   }
 
   const acceptDrawOnClick = async () => {
+    // XX potential error
     const gameID = displayGame.info.gameID
     await pokeAction(urbit, acceptDraw(gameID))
   }
 
   const declineDrawOnClick = async () => {
+    // XX potential error
     const gameID = displayGame.info.gameID
     await pokeAction(urbit, declineDraw(gameID), null, () => { declinedDraw(gameID) })
   }
 
   const acceptSpecialDrawOnClick = async () => {
+    // XX potential error
     const gameID = displayGame.info.gameID
     await pokeAction(urbit, claimSpecialDraw(gameID))
   }
@@ -324,6 +331,7 @@ export function Chessboard () {
         })
 
         const attemptUrbitMove = async () => {
+          // XX potential error
           const gameID: GameID = displayGame.info.gameID
 
           await pokeAction(
