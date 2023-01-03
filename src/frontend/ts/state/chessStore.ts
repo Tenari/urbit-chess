@@ -91,7 +91,6 @@ const useChessStore = create<ChessState>((set, get) => ({
   },
   receiveUpdate: (data: ChessUpdate) => {
     const updateDisplayGame = (updatedGame: ActiveGameInfo) => {
-      // XX potential error
       if ((get().displayGame !== null) && (updatedGame.info.gameID === get().displayGame.info.gameID)) {
         get().setDisplayGame(updatedGame)
         get().setDisplayIndex(updatedGame.info.moves.length - 1)
@@ -146,7 +145,6 @@ const useChessStore = create<ChessState>((set, get) => ({
         const gameID = resultData.gameID
 
         const displayGame = get().displayGame
-        // XX potential error
         if ((displayGame !== null) && (gameID === displayGame.info.gameID)) {
           get().setDisplayGame(null)
         }
