@@ -2,6 +2,7 @@ import Urbit from '@urbit/http-api'
 import { Ship, GameID, SAN, FENPosition, Move, GameInfo, ActiveGameInfo, Challenge, ChessUpdate, ChallengeUpdate } from '../types/urbitChess'
 
 interface ChessState {
+  // properties
   urbit: Urbit | null
   displayGame: ActiveGameInfo | null
   displayMoves: Array<SAN> | null
@@ -12,7 +13,7 @@ interface ChessState {
   incomingChallenges: Map<Ship, Challenge>
   outgoingChallenges: Map<Ship, Challenge>
   friends: Array<Ship>
-
+  // functions
   setUrbit: (urbit: Urbit) => void
   setDisplayGame: (displayGame: ActiveGameInfo | null) => void
   setDisplayMoves: (displayMoves: Array<SAN> | null) => void
