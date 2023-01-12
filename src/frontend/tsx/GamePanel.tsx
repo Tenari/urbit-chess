@@ -71,7 +71,7 @@ export function GamePanel () {
   }
 
   return (
-    <div className='game-panel-container col'>
+    <div className='game-panel-container col' style={{ display: ((displayGame !== null) ? 'flex' : ' none') }}>
       <div className="game-panel col">
         <div id="opp-timer" className={'timer row' + (hasGame ? '' : ' hidden')}>
           <p>00:00</p>

@@ -7,9 +7,10 @@ import { findFriends } from '../ts/helpers/urbitChess'
 import { Chessboard } from './Chessboard'
 import { Menu } from './Menu'
 import { GamePanel } from './GamePanel'
+import { PracticePanel } from './PracticePanel'
 
 export function App () {
-  const { urbit, setUrbit, receiveChallengeUpdate, receiveGame, setFriends } = useChessStore()
+  const { urbit, setUrbit, receiveChallengeUpdate, receiveGame, displayGame, setFriends } = useChessStore()
 
   //
   // Helper functions
@@ -57,6 +58,7 @@ export function App () {
     <Beforeunload onBeforeunload={teardown}>
       <div className='app-container'>
         <GamePanel />
+        <PracticePanel />
         <Chessboard />
         <Menu />
       </div>
