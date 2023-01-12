@@ -23,18 +23,16 @@ const useChessStore = create<ChessState>((set, get) => ({
       //
       //     might be necessary depending on how we implement
       //     the "view completed games" feature
-      get().setDisplayMoves([])
+      set({ displayMoves: [] })
       for (let move of displayGame.info.moves) {
         get().displayMoves.push(move.san)
       }
     } else {
-      get().setDisplayMoves([])
+      set({ displayMoves: [] })
       get().setDisplayIndex(null)
     }
     set({ displayGame })
   },
-  setDisplayMoves: (displayMoves: Array<SAN>) =>
-    set(state => ({ displayMoves })),
   setPracticeBoard: (practiceBoard: String | null) => set({ practiceBoard }),
   setFriends: async (friends: Array<Ship>) => set({ friends }),
   setDisplayIndex: (displayIndex: number | null) => {

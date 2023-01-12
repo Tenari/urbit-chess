@@ -16,7 +16,6 @@ interface ChessState {
   // functions
   setUrbit: (urbit: Urbit) => void
   setDisplayGame: (displayGame: ActiveGameInfo | null) => void
-  setDisplayMoves: (displayMoves: Array<SAN> | null) => void
   setDisplayIndex: (displayIndex: number | null) => void
   setPracticeBoard: (practiceBoard: String | null) => void
   setFriends: (friends: Array<Ship>) => void
