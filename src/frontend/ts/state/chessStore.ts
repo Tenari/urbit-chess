@@ -37,6 +37,10 @@ const useChessStore = create<ChessState>((set, get) => ({
     set(state => ({ displayMoves })),
   setPracticeBoard: (practiceBoard: String | null) => set({ practiceBoard }),
   setFriends: async (friends: Array<Ship>) => set({ friends }),
+  setDisplayIndex: (displayIndex: number | null) => {
+    set({ displayIndex })
+    console.log('setDisplayIndex displayIndex: ' + displayIndex)
+  },
   receiveChallengeUpdate: (data: ChallengeUpdate) => {
     switch (data.chessUpdate) {
       case Update.ChallengeSent: {
@@ -239,10 +243,6 @@ const useChessStore = create<ChessState>((set, get) => ({
     updatedGame.sentDrawOffer = true
 
     set(state => ({ activeGames: state.activeGames.set(gameID, updatedGame) }))
-  },
-  setDisplayIndex: (displayIndex: number | null) => {
-    set({ displayIndex })
-    console.log('setDisplayIndex displayIndex: ' + displayIndex)
   }
 }))
 

@@ -206,6 +206,7 @@ export function Chessboard () {
         showDests: toShowDests
       }
     }
+    // XX move these console logs to 'dev' branch once that exists
     console.log('updateBoard fen: ' + stateConfig.fen)
     console.log('updateBoard displayIndex: ' + displayIndex)
     api?.set(stateConfig)
