@@ -110,7 +110,7 @@ const useChessStore = create<ChessState>((set, get) => ({
         const currentGame = get().activeGames.get(gameID)
         const activeGameMoves = get().activeGameMoves
 
-        if (move.san !== '' && move.fen !== '') {
+        if (move.san !== null && move.fen !== null) {
           currentGame.info.moves.push(move)
 
           if (activeGameMoves.has(gameID) === false) {
