@@ -6,7 +6,7 @@ import { CHESS } from '../ts/constants/chess'
 import { Side, GameID, SAN, GameInfo, ActiveGameInfo } from '../ts/types/urbitChess'
 
 export function GamePanel () {
-  const { urbit, displayGame, displayMoves, setDisplayGame, offeredDraw, practiceBoard, setPracticeBoard, displayIndex, setDisplayIndex } = useChessStore()
+  const { urbit, displayGame, setDisplayGame, offeredDraw, practiceBoard, setPracticeBoard, displayIndex, setDisplayIndex } = useChessStore()
   const hasGame: boolean = (displayGame !== null)
   const practiceHasMoved = (localStorage.getItem('practiceBoard') !== CHESS.defaultFEN)
   const opponent = !hasGame ? '~sampel-palnet' : (urbit.ship === displayGame.info.white.substring(1))
@@ -29,38 +29,38 @@ export function GamePanel () {
   }
 
   const moveOpacity = (index: number) => {
-    if (index > displayIndex) {
-      return 0.3
-    } else {
+    if (displayIndex == null || index <= displayIndex) {
       return 1.0
+    } else {
+      return 0.3
     }
   }
 
   const moveList = () => {
+    let displayMoves = (displayGame.info.moves !== null) ? displayGame.info.moves : []
     let components = []
     for (let wIndex: number = 0; wIndex < displayMoves.length; wIndex += 2) {
       const move: number = (wIndex / 2) + 1
       const bIndex: number = wIndex + 1
-      const wMove: SAN = displayMoves[wIndex]
-      const bMove: SAN = displayMoves[wIndex + 1]
+      const wMove: SAN = displayMoves[wIndex].san
 
-      if (bIndex > displayMoves.length) {
+      if (bIndex >= displayMoves.length) {
         components.push(
-          <li key={ move } className='move-item' style={{ opacity: moveOpacity(wIndex) }}>
-            <span onClick={ () => setDisplayIndex(wIndex) }>
+          <li key={ move } className='move-item'>
+            <span onClick={ () => setDisplayIndex(wIndex) } style={{ opacity: moveOpacity(wIndex) }}>
               { wMove }
             </span>
           </li>
         )
       } else {
         components.push(
-          <li key={ move } className='move-item' style={{ opacity: moveOpacity(wIndex) }}>
-            <span onClick={ () => setDisplayIndex(wIndex) }>
+          <li key={ move } className='move-item'>
+            <span onClick={ () => setDisplayIndex(wIndex) } style={{ opacity: moveOpacity(wIndex) }}>
               { wMove }
             </span>
             { '\xa0'.repeat(6 - wMove.length) }
-            <span onClick={ () => setDisplayIndex(bIndex) } style={{ opacity: (wIndex <= displayIndex && bIndex > displayIndex) ? 0.3 : 1.0 }}>
-              { bMove }
+            <span onClick={ () => setDisplayIndex(bIndex) } style={{ opacity: moveOpacity(bIndex) }}>
+              { displayMoves[wIndex + 1].san }
             </span>
           </li>
         )

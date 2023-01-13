@@ -57,8 +57,11 @@ export function App () {
   return (
     <Beforeunload onBeforeunload={teardown}>
       <div className='app-container'>
-        <GamePanel />
-        <PracticePanel />
+        {
+          (displayGame == null)
+            ? <PracticePanel />
+            : <GamePanel />
+        }
         <Chessboard />
         <Menu />
       </div>

@@ -8,30 +8,15 @@ import ChessState from './chessState'
 const useChessStore = create<ChessState>((set, get) => ({
   urbit: null,
   displayGame: null,
-  displayMoves: [],
   practiceBoard: '',
   activeGames: new Map(),
-  activeGameMoves: new Map(),
   incomingChallenges: new Map(),
   outgoingChallenges: new Map(),
   friends: [],
   displayIndex: null,
   setUrbit: (urbit: Urbit) => set({ urbit }),
   setDisplayGame: (displayGame: ActiveGameInfo | null) => {
-    if (displayGame !== null) {
-      // XX: "GameInfo or ActiveGameInfo?" conditional logic
-      //
-      //     might be necessary depending on how we implement
-      //     the "view completed games" feature
-      set({ displayMoves: [] })
-      for (let move of displayGame.info.moves) {
-        get().displayMoves.push(move.san)
-      }
-    } else {
-      set({ displayMoves: [] })
-      get().setDisplayIndex(null)
-    }
-    set({ displayGame })
+    set({ displayGame, displayIndex: null })
   },
   setPracticeBoard: (practiceBoard: String | null) => set({ practiceBoard }),
   setFriends: async (friends: Array<Ship>) => set({ friends }),
@@ -94,9 +79,7 @@ const useChessStore = create<ChessState>((set, get) => ({
   receiveUpdate: (data: ChessUpdate) => {
     const updateDisplayGame = (updatedGame: ActiveGameInfo) => {
       if ((get().displayGame !== null) && (updatedGame.info.gameID === get().displayGame.info.gameID)) {
-        get().setDisplayGame(updatedGame)
-        get().setDisplayIndex(updatedGame.info.moves.length - 1)
-        console.log('updateDisplayGame displayIndex: ' + (updatedGame.info.moves.length - 1))
+        set({ displayGame: updatedGame, displayIndex: null })
       }
     }
 
@@ -106,17 +89,9 @@ const useChessStore = create<ChessState>((set, get) => ({
         const gameID = positionData.gameID
         const move = positionData.move
         const currentGame = get().activeGames.get(gameID)
-        const activeGameMoves = get().activeGameMoves
 
         if (move.san !== null && move.fen !== null) {
           currentGame.info.moves.push(move)
-
-          if (activeGameMoves.has(gameID) === false) {
-            activeGameMoves.set(gameID, [move])
-          } else {
-            activeGameMoves.get(gameID).push(move)
-            set({ activeGameMoves })
-          }
 
           const updatedGame: ActiveGameInfo = {
             position: move.fen,
@@ -129,10 +104,6 @@ const useChessStore = create<ChessState>((set, get) => ({
 
           set(state => ({ activeGames: state.activeGames.set(gameID, updatedGame) }))
           updateDisplayGame(updatedGame)
-
-          if (get().displayMoves.length > 0) {
-            get().setDisplayIndex(get().displayMoves.length - 1)
-          }
 
           console.log('RECEIVED POSITION UPDATE')
           console.log('Update.Position displayIndex: ' + (get().displayIndex))

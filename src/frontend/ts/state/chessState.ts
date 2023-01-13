@@ -5,11 +5,9 @@ interface ChessState {
   // properties
   urbit: Urbit | null
   displayGame: ActiveGameInfo | null
-  displayMoves: Array<SAN> | null
   displayIndex: number | null
   practiceBoard: String | null
   activeGames: Map<GameID, ActiveGameInfo>
-  activeGameMoves: Map<GameID, Array<Move>>
   incomingChallenges: Map<Ship, Challenge>
   outgoingChallenges: Map<Ship, Challenge>
   friends: Array<Ship>

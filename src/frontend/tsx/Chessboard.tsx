@@ -40,7 +40,7 @@ export function Chessboard () {
   const [chess, setChess] = useState<ChessInstance>(new Chess())
   const [promotionMove, setPromotionMove] = useState<PromotionMove | null>(null)
   const [renderWorkaround, forceRenderWorkaround] = useState<number>(Date.now())
-  const { urbit, displayGame, declinedDraw, offeredDraw, setDisplayGame, activeGameMoves, practiceBoard, setPracticeBoard, displayIndex, setDisplayIndex } = useChessStore()
+  const { urbit, displayGame, declinedDraw, offeredDraw, setDisplayGame, practiceBoard, setPracticeBoard, displayIndex } = useChessStore()
   const { pieceTheme, boardTheme } = usePreferenceStore()
 
   //
@@ -64,14 +64,10 @@ export function Chessboard () {
     : `~${window.ship}'s practice board`
   const isViewOnly = (displayIndex == null)
     ? false
-    : (activeGameMoves.get(displayGame.info.gameID) == null)
+    : (displayGame.info.moves == null)
       ? false
-      : (displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1)
-  const toShowDests = (displayIndex == null)
-    ? true
-    : (activeGameMoves.get(displayGame.info.gameID) == null)
-      ? true
-      : !((displayIndex < activeGameMoves.get(displayGame.info.gameID).length - 1))
+      : (displayIndex < displayGame.info.moves.length - 1)
+  const toShowDests = !isViewOnly
 
   //
   // React hook helper functions
@@ -194,9 +190,9 @@ export function Chessboard () {
 
   const updateBoard = () => {
     const stateConfig: CgConfig = {
-      fen: (displayIndex == null || activeGameMoves.get(displayGame.info.gameID) == null)
+      fen: (displayIndex == null || displayGame.info.moves == null)
         ? chess.fen()
-        : activeGameMoves.get(displayGame.info.gameID)[displayIndex].fen,
+        : displayGame.info.moves[displayIndex].fen,
       viewOnly: isViewOnly,
       turnColor: sideToMove as cg.Color,
       check: chess.in_check(),
